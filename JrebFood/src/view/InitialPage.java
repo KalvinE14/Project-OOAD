@@ -39,12 +39,12 @@ public class InitialPage extends View {
 		txtJrebfood.setBorder(null);
 		txtJrebfood.setColumns(10);
 		txtJrebfood.setEditable(false);
-		txtJrebfood.setBorder(new EmptyBorder(40, 0, 0, 0));
+		txtJrebfood.setBorder(new EmptyBorder(70, 0, 0, 0));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
 		btnPanel.setLayout(new GridLayout(2, 1, 0, 35));
-		btnPanel.setBorder(new EmptyBorder(190, 70, 190, 70));
+		btnPanel.setBorder(new EmptyBorder(190, 70, 150, 70));
 		
 		btnLogin = new JButton("Login");
 		

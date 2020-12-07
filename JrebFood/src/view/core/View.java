@@ -18,6 +18,7 @@ public abstract class View extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		setResizable(false);
 	}
 	
 	public abstract void initialize();
