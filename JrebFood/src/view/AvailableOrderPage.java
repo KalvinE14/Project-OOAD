@@ -25,12 +25,11 @@ import view.core.View;
 
 public class AvailableOrderPage extends View{
 
-	JPanel avlOrdPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, btnPanel;
+	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, navPanel, btnPanel;
 	JTable table;
 	JScrollPane scrollPane;
 	JLabel title, id, name, foodName, qty, foodPrice;
-	JButton accBtn;
-	
+	JButton accBtn, orderHistoryBtn;
 	
 	Vector<Vector<String>> availableOrderList;
 	
@@ -46,13 +45,23 @@ public class AvailableOrderPage extends View{
 	public void initialize() {
 		setBackground(Color.ORANGE);
 		
-		avlOrdPanel = new JPanel(new BorderLayout());
-		avlOrdPanel.setBackground(Color.ORANGE);
-		avlOrdPanel.setBorder(new EmptyBorder(20, 0, 50, 0));
+		contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(Color.ORANGE);
+		setContentPane(contentPane);
+		
+		avaiOrderPanel = new JPanel(new BorderLayout());
+		avaiOrderPanel.setBackground(Color.ORANGE);
+		avaiOrderPanel.setBorder(new EmptyBorder(20, 0, 50, 0));
 		
 		orderPanel = new JPanel(new BorderLayout());
 		orderPanel.setBackground(Color.ORANGE);
 		orderPanel.setBorder(new EmptyBorder(0, 0, 50, 0));
+		
+		navPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		navPanel.setBackground(Color.ORANGE);
+		
+		orderHistoryBtn = new JButton("Order History");
+		orderHistoryBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		
 		table = new JTable();
 		table.setBackground(Color.ORANGE);
@@ -121,6 +130,8 @@ public class AvailableOrderPage extends View{
 
 	@Override
 	public void addComponent() {
+		navPanel.add(orderHistoryBtn);
+		
 		tablePanel.add(id);
 		tablePanel.add(name);
 		tablePanel.add(scrollPane);
@@ -129,14 +140,13 @@ public class AvailableOrderPage extends View{
 		
 		orderPanel.add(tablePanel, BorderLayout.CENTER);
 		
-		avlOrdPanel.add(title, BorderLayout.NORTH);
-		avlOrdPanel.add(orderPanel, BorderLayout.CENTER);
-		avlOrdPanel.add(btnPanel, BorderLayout.SOUTH);
+		avaiOrderPanel.add(title, BorderLayout.NORTH);
+		avaiOrderPanel.add(orderPanel, BorderLayout.CENTER);
+		avaiOrderPanel.add(btnPanel, BorderLayout.SOUTH);
 		
-		add(avlOrdPanel);
+		contentPane.add(navPanel, BorderLayout.NORTH);
+		contentPane.add(avaiOrderPanel, BorderLayout.CENTER);
 	}
-	
-	
 
 	@Override
 	public void addListener() {
@@ -180,6 +190,15 @@ public class AvailableOrderPage extends View{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new DriverDetailOrderPage().showForm();
+			}
+		});
+		
+		orderHistoryBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new DriverOrderHistoryPage().showForm();
 			}
 		});
 	}

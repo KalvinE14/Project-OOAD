@@ -21,7 +21,7 @@ import view.core.View;
 
 public class DriverDetailOrderPage extends View{
 
-	JPanel ordDetailPanel, detailInfoPanel, btnPanel, custPanel, orderPanel, custTablePanel, ordTablePanel, custInfoPanel;
+	JPanel contentPane, detailInfoPanel, btnPanel, custPanel, orderPanel, custTablePanel, ordTablePanel, custInfoPanel;
 	JTable custInfoTable, orderDetailTable;
 	JLabel title, custLabel, orderDetailLabel, custNameLabel, custGenderLabel, custEmailLabel, custPhoneLabel, custAddressLabel;
 	JButton orderBtn;
@@ -50,46 +50,7 @@ public class DriverDetailOrderPage extends View{
 		
 		initBtn();
 	}
-
-	private void initBtn() {
-		orderBtn = new JButton("Order");
-		orderBtn.setBounds(10, 140, 50, 20);
-		orderBtn.setHorizontalAlignment(SwingConstants.CENTER);
-		orderBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
-	}
-
-	private void initLabel() {
-		title = new JLabel("Order Information");
-		title.setBounds(10, 140, 50, 20);
-		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		
-		custLabel = new JLabel("Customer Information");
-		custLabel.setBounds(10, 140, 50, 20);
-		custLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custNameLabel = new JLabel("Jack");
-		custNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custNameLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custGenderLabel = new JLabel("Male");
-		custGenderLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custGenderLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custAddressLabel = new JLabel("Bambu Street");
-		custAddressLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custAddressLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custPhoneLabel = new JLabel("081222222222");
-		custPhoneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custPhoneLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custEmailLabel = new JLabel("jack@gmail.com");
-		custEmailLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custEmailLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		
-		orderDetailLabel = new JLabel("Order Detail");
-		orderDetailLabel.setBounds(10, 140, 50, 20);
-		orderDetailLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		orderDetailLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-	}
-
+	
 	@Override
 	public void addComponent() {
 		custInfoPanel.add(custNameLabel);
@@ -111,11 +72,9 @@ public class DriverDetailOrderPage extends View{
 		
 		btnPanel.add(orderBtn);
 		
-		ordDetailPanel.add(title, BorderLayout.NORTH);
-		ordDetailPanel.add(detailInfoPanel, BorderLayout.CENTER);
-		ordDetailPanel.add(btnPanel, BorderLayout.SOUTH);
-		
-		add(ordDetailPanel);
+		contentPane.add(title, BorderLayout.NORTH);
+		contentPane.add(detailInfoPanel, BorderLayout.CENTER);
+		contentPane.add(btnPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -125,30 +84,31 @@ public class DriverDetailOrderPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				//new DriverCurrentOrderPage().showForm();
+				new DriverCurrentOrderPage().showForm();
 			}
 		});
 	}
 	
-	public void initPanel()
+	private void initPanel()
 	{
-		ordDetailPanel = new JPanel(new BorderLayout());
-		ordDetailPanel.setBackground(Color.ORANGE);
-		ordDetailPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
+		contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(Color.ORANGE);
+		contentPane.setBorder(new EmptyBorder(20, 0, 20, 0));
+		setContentPane(contentPane);
 		
 		detailInfoPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		detailInfoPanel.setBackground(Color.ORANGE);
-		detailInfoPanel.setBorder(new EmptyBorder(10, 0, 30, 0));
+		detailInfoPanel.setBorder(new EmptyBorder(30, 0, 50, 0));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
 		btnPanel.setBorder(new EmptyBorder(0, 20, 0, 20));
 		
-		custPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		custPanel = new JPanel(new GridLayout(2, 1, 0, -25));
 		custPanel.setBackground(Color.ORANGE);
 		custPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
-		orderPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		orderPanel = new JPanel(new GridLayout(2, 1, 0, -25));
 		orderPanel.setBackground(Color.ORANGE);
 		orderPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 		
@@ -159,8 +119,48 @@ public class DriverDetailOrderPage extends View{
 		ordTablePanel.setBorder(null);
 		ordTablePanel.setBackground(Color.ORANGE);
 	}
+
+
+	private void initLabel() {
+		title = new JLabel("Order Information");
+		title.setBounds(10, 140, 50, 20);
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		
+		custLabel = new JLabel("Customer Information");
+		custLabel.setBounds(10, 140, 50, 20);
+		custLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		custNameLabel = new JLabel("Jack");
+		custNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custNameLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		custGenderLabel = new JLabel("Male");
+		custGenderLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custGenderLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		custAddressLabel = new JLabel("Bambu Street");
+		custAddressLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custAddressLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		custPhoneLabel = new JLabel("081222222222");
+		custPhoneLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custPhoneLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		custEmailLabel = new JLabel("jack@gmail.com");
+		custEmailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		custEmailLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		
+		orderDetailLabel = new JLabel("Order Detail");
+		orderDetailLabel.setBounds(10, 140, 50, 20);
+		orderDetailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		orderDetailLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+	}
 	
-	public void initOrderDetailTable()
+	private void initBtn() {
+		orderBtn = new JButton("Order");
+		orderBtn.setBounds(10, 140, 50, 20);
+		orderBtn.setHorizontalAlignment(SwingConstants.CENTER);
+		orderBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+	}
+
+	private void initOrderDetailTable()
 	{
 		orderDetailTable = new JTable();
 		orderDetailTable.setBackground(Color.ORANGE);
