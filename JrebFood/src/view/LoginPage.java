@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPage extends View {
 	JLabel txtLogin, txtEmail, txtPassword;
@@ -89,7 +91,14 @@ public class LoginPage extends View {
 
 	@Override
 	public void addListener() {
-		// TODO Auto-generated method stub
+		btnSubmit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new HomePage().showForm();
+			}
+		});
 		
 	}
 

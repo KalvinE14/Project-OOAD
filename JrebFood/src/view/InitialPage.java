@@ -71,6 +71,14 @@ public class InitialPage extends View {
 			}
 		});
 		
+		btnRegister.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new RegisterPage().showForm();
+			}
+		});
 	}
 
 }

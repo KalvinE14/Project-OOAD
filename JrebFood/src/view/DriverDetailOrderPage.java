@@ -125,7 +125,7 @@ public class DriverDetailOrderPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new DriverCurrentOrderPage().showForm();
+				//new DriverCurrentOrderPage().showForm();
 			}
 		});
 	}
