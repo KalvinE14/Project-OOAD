@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2020 at 08:22 AM
+-- Generation Time: Dec 10, 2020 at 02:18 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -24,38 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `availableorderdetail`
---
-
-CREATE TABLE `availableorderdetail` (
-  `AvailableOrderId` int(11) NOT NULL,
-  `FoodId` int(11) NOT NULL,
-  `Qty` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `availableorderheader`
---
-
-CREATE TABLE `availableorderheader` (
-  `AvailableOrderId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `OrderTime` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `carts`
 --
 
 CREATE TABLE `carts` (
-  `CartId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `FoodId` int(11) NOT NULL,
-  `Qty` int(11) NOT NULL
+  `userId` int(11) NOT NULL,
+  `foodId` int(11) NOT NULL,
+  `qty` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employees`
+--
+
+CREATE TABLE `employees` (
+  `employeeId` int(11) NOT NULL,
+  `roleId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `dob` date NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -65,49 +56,49 @@ CREATE TABLE `carts` (
 --
 
 CREATE TABLE `foods` (
-  `FoodId` int(11) NOT NULL,
-  `FoodName` varchar(255) NOT NULL,
-  `Description` varchar(255) NOT NULL,
-  `Status` varchar(255) NOT NULL
+  `foodId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orderdetail`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `orderdetail` (
-  `OrderId` int(11) NOT NULL,
-  `FoodId` int(11) NOT NULL,
-  `Qty` int(11) NOT NULL
+CREATE TABLE `orders` (
+  `orderId` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `driverId` int(11) DEFAULT NULL,
+  `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orderheader`
+-- Table structure for table `order_details`
 --
 
-CREATE TABLE `orderheader` (
-  `OrderId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `DriverId` int(11) NOT NULL,
-  `OrderTime` date NOT NULL,
-  `Status` varchar(255) NOT NULL,
-  `Ready` varchar(255) NOT NULL
+CREATE TABLE `order_details` (
+  `orderId` int(11) NOT NULL,
+  `foodId` int(11) NOT NULL,
+  `qty` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profits`
+-- Table structure for table `roles`
 --
 
-CREATE TABLE `profits` (
-  `ProfitId` int(11) NOT NULL,
-  `DriverId` int(11) NOT NULL,
-  `Profit` int(11) NOT NULL
+CREATE TABLE `roles` (
+  `roleId` int(11) NOT NULL,
+  `roleName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -117,14 +108,12 @@ CREATE TABLE `profits` (
 --
 
 CREATE TABLE `users` (
-  `UserId` int(11) NOT NULL,
-  `Username` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Gender` varchar(255) NOT NULL,
-  `Address` varchar(255) NOT NULL,
-  `Email` varchar(255) NOT NULL,
-  `Phone` varchar(255) NOT NULL,
-  `Role` varchar(255) NOT NULL
+  `userId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phoneNumber` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -132,142 +121,114 @@ CREATE TABLE `users` (
 --
 
 --
--- Indexes for table `availableorderdetail`
---
-ALTER TABLE `availableorderdetail`
-  ADD KEY `fk_f` (`FoodId`);
-
---
--- Indexes for table `availableorderheader`
---
-ALTER TABLE `availableorderheader`
-  ADD PRIMARY KEY (`AvailableOrderId`),
-  ADD KEY `fk_u` (`UserId`);
-
---
 -- Indexes for table `carts`
 --
 ALTER TABLE `carts`
-  ADD PRIMARY KEY (`CartId`),
-  ADD KEY `fk_user` (`UserId`),
-  ADD KEY `fk_food` (`FoodId`);
+  ADD KEY `fk_cart_user` (`userId`),
+  ADD KEY `fk_cart_food` (`foodId`);
+
+--
+-- Indexes for table `employees`
+--
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`employeeId`),
+  ADD KEY `fk_role` (`roleId`);
 
 --
 -- Indexes for table `foods`
 --
 ALTER TABLE `foods`
-  ADD PRIMARY KEY (`FoodId`);
+  ADD PRIMARY KEY (`foodId`);
 
 --
--- Indexes for table `orderdetail`
+-- Indexes for table `orders`
 --
-ALTER TABLE `orderdetail`
-  ADD KEY `fk_order` (`OrderId`),
-  ADD KEY `fk_order_food` (`FoodId`);
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`orderId`),
+  ADD KEY `fk_order_driver` (`driverId`);
 
 --
--- Indexes for table `orderheader`
+-- Indexes for table `order_details`
 --
-ALTER TABLE `orderheader`
-  ADD PRIMARY KEY (`OrderId`),
-  ADD KEY `fk_order_user` (`UserId`),
-  ADD KEY `fk_order_driver` (`DriverId`);
+ALTER TABLE `order_details`
+  ADD KEY `fk_detail_order` (`orderId`),
+  ADD KEY `fk_food_order` (`foodId`);
 
 --
--- Indexes for table `profits`
+-- Indexes for table `roles`
 --
-ALTER TABLE `profits`
-  ADD PRIMARY KEY (`ProfitId`),
-  ADD KEY `fk_driver` (`DriverId`);
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`roleId`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`UserId`);
+  ADD PRIMARY KEY (`userId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `availableorderheader`
+-- AUTO_INCREMENT for table `employees`
 --
-ALTER TABLE `availableorderheader`
-  MODIFY `AvailableOrderId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `carts`
---
-ALTER TABLE `carts`
-  MODIFY `CartId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `employees`
+  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `FoodId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `foodId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `orderheader`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `orderheader`
-  MODIFY `OrderId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orders`
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `profits`
+-- AUTO_INCREMENT for table `roles`
 --
-ALTER TABLE `profits`
-  MODIFY `ProfitId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `roles`
+  MODIFY `roleId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `availableorderdetail`
---
-ALTER TABLE `availableorderdetail`
-  ADD CONSTRAINT `fk_f` FOREIGN KEY (`FoodId`) REFERENCES `foods` (`FoodId`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `availableorderheader`
---
-ALTER TABLE `availableorderheader`
-  ADD CONSTRAINT `fk_u` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `carts`
 --
 ALTER TABLE `carts`
-  ADD CONSTRAINT `fk_food` FOREIGN KEY (`FoodId`) REFERENCES `foods` (`FoodId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_cart_food` FOREIGN KEY (`foodId`) REFERENCES `foods` (`foodId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `orderdetail`
+-- Constraints for table `employees`
 --
-ALTER TABLE `orderdetail`
-  ADD CONSTRAINT `fk_order` FOREIGN KEY (`OrderId`) REFERENCES `orderheader` (`OrderId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_order_food` FOREIGN KEY (`FoodId`) REFERENCES `foods` (`FoodId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `employees`
+  ADD CONSTRAINT `fk_role` FOREIGN KEY (`roleId`) REFERENCES `roles` (`roleId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `orderheader`
+-- Constraints for table `orders`
 --
-ALTER TABLE `orderheader`
-  ADD CONSTRAINT `fk_order_driver` FOREIGN KEY (`DriverId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_order_user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_order_driver` FOREIGN KEY (`driverId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `profits`
+-- Constraints for table `order_details`
 --
-ALTER TABLE `profits`
-  ADD CONSTRAINT `fk_driver` FOREIGN KEY (`DriverId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `order_details`
+  ADD CONSTRAINT `fk_detail_order` FOREIGN KEY (`orderId`) REFERENCES `orders` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_food_order` FOREIGN KEY (`foodId`) REFERENCES `foods` (`foodId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
