@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2020 at 02:18 PM
+-- Generation Time: Dec 11, 2020 at 04:04 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -49,6 +49,17 @@ CREATE TABLE `employees` (
   `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `employees`
+--
+
+INSERT INTO `employees` (`employeeId`, `roleId`, `name`, `dob`, `email`, `password`, `status`) VALUES
+(1, 1, 'Niko Rangel', '2001-08-03', 'niko@gmail.com', 'niko06', 'Active'),
+(2, 3, 'Ayaz Cantrell', '1989-12-01', 'ayaz@gmail.com', 'ayaz07', 'Active'),
+(3, 1, 'Pranav Buckley', '1999-09-15', 'pranav@gmail.com', 'pranav08', 'Inactive'),
+(4, 2, 'Shelbie Bateman', '1995-12-30', 'shelbie@gmail.com', 'shelbie09', 'Active'),
+(5, 2, 'Hasnain Arroyo', '2000-02-14', 'hasnain@gmail.com', 'hasnain10', 'Inactive');
+
 -- --------------------------------------------------------
 
 --
@@ -63,6 +74,17 @@ CREATE TABLE `foods` (
   `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `foods`
+--
+
+INSERT INTO `foods` (`foodId`, `name`, `price`, `description`, `status`) VALUES
+(1, 'Burger', 12000, 'A sandwich consisting of one or more cooked patties of ground meat, usually beef, placed inside a sliced bread roll or bun.', 'Available'),
+(2, 'Sandwich', 10000, 'A food typically consisting of vegetables, sliced cheese or meat, placed on or between slices of bread', 'Not Available'),
+(3, 'Fried Rice', 20000, 'A dish of cooked rice that has been stir-fried in a wok or a frying pan', 'Available'),
+(4, 'Spaghetti', 25000, 'A staple food of traditional Italian cuisine', 'Available'),
+(5, 'Fried Chicken', 15000, 'A dish consisting of chicken pieces which have been coated in a seasoned batter and pan-fried', 'Not Available');
+
 -- --------------------------------------------------------
 
 --
@@ -71,12 +93,23 @@ CREATE TABLE `foods` (
 
 CREATE TABLE `orders` (
   `orderId` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `orderDate` date NOT NULL,
   `address` varchar(255) NOT NULL,
   `userId` int(11) NOT NULL,
   `driverId` int(11) DEFAULT NULL,
   `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`orderId`, `orderDate`, `address`, `userId`, `driverId`, `status`) VALUES
+(1, '2020-11-18', '1476 August Lane', 1, NULL, 'Not accepted'),
+(2, '2020-11-17', '1476 August Lane', 1, 1, 'Accepted'),
+(3, '2020-11-16', '1476 August Lane', 1, 1, 'Ordered'),
+(4, '2020-11-15', '1476 August Lane', 1, 1, 'Cooked'),
+(5, '2020-11-14', '1476 August Lane', 1, 1, 'Finished');
 
 -- --------------------------------------------------------
 
@@ -90,6 +123,22 @@ CREATE TABLE `order_details` (
   `qty` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`orderId`, `foodId`, `qty`) VALUES
+(1, 1, 1),
+(1, 2, 2),
+(2, 5, 4),
+(2, 4, 1),
+(3, 2, 2),
+(3, 5, 4),
+(4, 1, 2),
+(4, 3, 2),
+(5, 1, 1),
+(5, 3, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -100,6 +149,15 @@ CREATE TABLE `roles` (
   `roleId` int(11) NOT NULL,
   `roleName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`roleId`, `roleName`) VALUES
+(1, 'Driver'),
+(2, 'Chef'),
+(3, 'Manager');
 
 -- --------------------------------------------------------
 
@@ -115,6 +173,17 @@ CREATE TABLE `users` (
   `phoneNumber` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userId`, `name`, `address`, `email`, `phoneNumber`, `password`) VALUES
+(1, 'Kye Freeman', '1476 August Lane', 'kye@gmail.com', '+44-735-5520-375', 'kye01'),
+(2, 'Gabriella Barker', '2403 Hart Street', 'gabriella@gmail.com', '+44-755-5541-874', 'gabriella02'),
+(3, 'Zayden Herrera', '1132 College Street', 'zayden@gmail.com', '+44-785-5519-340', 'zayden03'),
+(4, 'Zacharia Devlin', '4668 Stockert Hollow Road', 'zacharia@gmail.com', '+44-725-5559-659', 'zacharia04'),
+(5, 'Jan Rhodes', '2724  Hart Street', 'jan@gmail.com', '+44-725-5557-369', 'jan05');
 
 --
 -- Indexes for dumped tables
@@ -145,7 +214,8 @@ ALTER TABLE `foods`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`orderId`),
-  ADD KEY `fk_order_driver` (`driverId`);
+  ADD KEY `fk_order_driver` (`driverId`),
+  ADD KEY `userId` (`userId`);
 
 --
 -- Indexes for table `order_details`
@@ -174,31 +244,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `foodId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `foodId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `roleId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `roleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -221,7 +291,8 @@ ALTER TABLE `employees`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `fk_order_driver` FOREIGN KEY (`driverId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_order_driver` FOREIGN KEY (`driverId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_details`
