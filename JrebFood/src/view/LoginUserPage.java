@@ -96,7 +96,7 @@ public class LoginUserPage extends View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new HomePage().showForm();
+				new HomeUserPage().showForm();
 			}
 		});
 		

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -20,10 +22,10 @@ import javax.swing.table.DefaultTableModel;
 
 import view.core.View;
 
-public class HomePage extends View{
+public class HomeUserPage extends View{
 	
-	private JPanel titlePanel, menuPanel, btnPanel;
-	private JButton btnAdd, btnCart;
+	private JPanel titlePanel, menuPanel, btnPanel, navPanel;
+	private JButton btnAdd, btnCart, btnOrderHistory, btnActiveOrder;
 	private JLabel txtTitle;
 	private Vector<String> foodList;
 	
@@ -31,7 +33,7 @@ public class HomePage extends View{
 	private JScrollBar scrollBar;
 	private JTable table;
 	
-	public HomePage() {
+	public HomeUserPage() {
 		super();
 		this.width = 500;
 		this.height = 600;
@@ -45,10 +47,16 @@ public class HomePage extends View{
 		btnCart.setText("My Cart");
 		btnCart.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		titlePanel = new JPanel(new GridLayout(2, 1, 0, 10));
+		btnOrderHistory = new JButton("Order History");
+		btnActiveOrder = new JButton("Active Order");
+		
+		navPanel = new JPanel(new GridLayout(1, 3, 18, 0));
+		navPanel.setBackground(Color.ORANGE);
+		
+		titlePanel = new JPanel(new GridLayout(2, 1, 10, 20));
 		titlePanel.setBorder(null);
 		titlePanel.setBackground(Color.ORANGE);
-		titlePanel.setBorder(new EmptyBorder(70, 200, 20, 200));
+		titlePanel.setBorder(new EmptyBorder(70, 60, 20, 60));
 		
 		txtTitle = new JLabel();
 		txtTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -72,7 +80,6 @@ public class HomePage extends View{
 		scroll.setPreferredSize(new Dimension(380, 380));
 		scroll.setVerticalScrollBar(scrollBar);
 		scroll.setBackground(Color.ORANGE);
-		scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -135,7 +142,10 @@ public class HomePage extends View{
 	@Override
 	public void addComponent() {
 		titlePanel.add(txtTitle);
-		titlePanel.add(btnCart);
+		navPanel.add(btnActiveOrder);
+		navPanel.add(btnOrderHistory);
+		navPanel.add(btnCart);
+		titlePanel.add(navPanel);
 		add(titlePanel, BorderLayout.NORTH);
 		menuPanel.add(scroll);
 		add(menuPanel, BorderLayout.CENTER);
@@ -145,8 +155,31 @@ public class HomePage extends View{
 
 	@Override
 	public void addListener() {
+		btnCart.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new CartPage().showForm();
+			}
+		});
 		
+		btnOrderHistory.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				new UserOrderHistoryPage().showForm();
+			}
+		});
 		
+		btnActiveOrder.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new UserCurrentOrderPage().showForm();
+			}
+		});
 	}
-
 }
