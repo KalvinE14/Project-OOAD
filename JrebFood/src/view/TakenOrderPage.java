@@ -188,6 +188,15 @@ public class TakenOrderPage extends View{
 				new TakenOrderDetailPage().showForm();
 			}
 		});
+		
+		homeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new HomeDriverPage().showForm();
+			}
+		});
 	}
 
 }
