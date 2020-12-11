@@ -62,7 +62,7 @@ public class RegisterSuccessPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new LoginPage().showForm();
+				new HomePage().showForm();
 			}
 		});
 	}

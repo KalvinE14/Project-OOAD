@@ -19,14 +19,14 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginPage extends View {
+public class LoginEmployeePage extends View {
 	JLabel txtLogin, txtEmail, txtPassword;
 	JPanel titlePanel, formPanel, btnPanel, fieldPanel;
 	JTextField emailValue;
 	JPasswordField passwordValue;
 	JButton btnSubmit;
 	
-	public LoginPage() {
+	public LoginEmployeePage() {
 		super();
 		this.width = 500;
 		this.height = 600;
@@ -42,7 +42,7 @@ public class LoginPage extends View {
 		
 		txtLogin = new JLabel();
 		txtLogin.setFont(new Font("Tahoma", Font.BOLD, 24));
-		txtLogin.setText("Login");
+		txtLogin.setText("Login as Employee");
 		txtLogin.setBorder(new EmptyBorder(70, 0, 20, 0));
 		
 		fieldPanel = new JPanel(new GridLayout(2, 1, 0, 0));
@@ -96,7 +96,7 @@ public class LoginPage extends View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new HomePage().showForm();
+				new HomeDriverPage().showForm();
 			}
 		});
 		

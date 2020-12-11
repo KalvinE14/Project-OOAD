@@ -26,7 +26,7 @@ public class DriverOrderHistoryPage extends View{
 	JTable orderHistoryTable, orderDetailHistoryTable;
 	JLabel title, orderHistoryLabel, orderDetailHistoryLabel;
 	JScrollPane orderHistoryScrollPane, orderDetailHistoryScrollPane;
-	JButton toAvailableOrderBtn;
+	JButton homeBtn;
 	
 	Vector<Vector<String>> orderHistoryData;
 	Vector<String> orderHistoryHeader, orderHistoryDetail;
@@ -65,7 +65,7 @@ public class DriverOrderHistoryPage extends View{
 		
 		historyPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		historyPanel.setBackground(Color.ORANGE);
-		historyPanel.setBorder(new EmptyBorder(20, 0, 100, 0));
+		historyPanel.setBorder(new EmptyBorder(20, 20, 100, 20));
 		
 		orderHistoryPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		orderHistoryPanel.setBackground(Color.ORANGE);
@@ -78,8 +78,8 @@ public class DriverOrderHistoryPage extends View{
 	}
 
 	private void initNavigation() {
-		toAvailableOrderBtn = new JButton("Available Order");
-		toAvailableOrderBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		homeBtn = new JButton("Home");
+		homeBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
 	}
 
 	private void initOrderHistoryTable() {
@@ -173,7 +173,7 @@ public class DriverOrderHistoryPage extends View{
 
 	@Override
 	public void addComponent() {
-		navPanel.add(toAvailableOrderBtn);
+		navPanel.add(homeBtn);
 		
 		orderTablePanel.add(orderHistoryScrollPane);
 		
@@ -195,12 +195,12 @@ public class DriverOrderHistoryPage extends View{
 
 	@Override
 	public void addListener() {
-		toAvailableOrderBtn.addActionListener(new ActionListener() {
+		homeBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new AvailableOrderPage().showForm();
+				new HomeDriverPage().showForm();
 			}
 		});
 	}

@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,10 +22,10 @@ import view.core.View;
 
 public class DriverDetailOrderPage extends View{
 
-	JPanel contentPane, detailInfoPanel, btnPanel, custPanel, orderPanel, custTablePanel, ordTablePanel, custInfoPanel;
+	JPanel contentPane, navPanel, infoPanel, detailInfoPanel, btnPanel, custPanel, orderPanel, custTablePanel, ordTablePanel, custInfoPanel;
 	JTable custInfoTable, orderDetailTable;
 	JLabel title, custLabel, orderDetailLabel, custNameLabel, custGenderLabel, custEmailLabel, custPhoneLabel, custAddressLabel;
-	JButton orderBtn;
+	JButton orderBtn, homeBtn;
 	JScrollPane custScrollPane, orderScrollPane;
 	
 	Vector<String> customerData;
@@ -72,19 +73,23 @@ public class DriverDetailOrderPage extends View{
 		
 		btnPanel.add(orderBtn);
 		
-		contentPane.add(title, BorderLayout.NORTH);
-		contentPane.add(detailInfoPanel, BorderLayout.CENTER);
-		contentPane.add(btnPanel, BorderLayout.SOUTH);
+		navPanel.add(homeBtn);
+		
+		infoPanel.add(title, BorderLayout.NORTH);
+		infoPanel.add(detailInfoPanel, BorderLayout.CENTER);
+		
+		contentPane.add(navPanel, BorderLayout.NORTH);
+		contentPane.add(infoPanel, BorderLayout.CENTER);
 	}
 
 	@Override
 	public void addListener() {
-		orderBtn.addActionListener(new ActionListener() {
+		homeBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new DriverCurrentOrderPage().showForm();
+				new HomeDriverPage().showForm();
 			}
 		});
 	}
@@ -93,16 +98,24 @@ public class DriverDetailOrderPage extends View{
 	{
 		contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(20, 0, 20, 0));
+		contentPane.setBorder(new EmptyBorder(0, 0, 20, 0));
 		setContentPane(contentPane);
+		
+		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		navPanel.setBackground(Color.ORANGE);
+		navPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
+		
+		infoPanel = new JPanel(new BorderLayout());
+		infoPanel.setBackground(Color.ORANGE);
+		infoPanel.setBorder(new EmptyBorder(0, 0, 50, 0));
 		
 		detailInfoPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		detailInfoPanel.setBackground(Color.ORANGE);
-		detailInfoPanel.setBorder(new EmptyBorder(30, 0, 50, 0));
+		detailInfoPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
-		btnPanel.setBorder(new EmptyBorder(0, 20, 0, 20));
+		btnPanel.setBorder(new EmptyBorder(20, 20, 0, 20));
 		
 		custPanel = new JPanel(new GridLayout(2, 1, 0, -25));
 		custPanel.setBackground(Color.ORANGE);
@@ -158,6 +171,9 @@ public class DriverDetailOrderPage extends View{
 		orderBtn.setBounds(10, 140, 50, 20);
 		orderBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		orderBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		
+		homeBtn = new JButton("Home");
+		homeBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
 	}
 
 	private void initOrderDetailTable()

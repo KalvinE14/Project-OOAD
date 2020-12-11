@@ -25,11 +25,11 @@ import view.core.View;
 
 public class AvailableOrderPage extends View{
 
-	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, navPanel, btnPanel;
+	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, footPanel, btnPanel, confirmPanel, homePanel;
 	JTable table;
 	JScrollPane scrollPane;
-	JLabel title, id, name, foodName, qty, foodPrice;
-	JButton accBtn, orderHistoryBtn;
+	JLabel title, id, name, foodName, qty, foodPrice, confirmLabel;
+	JButton accBtn, orderHistoryBtn, yesBtn, noBtn, homeBtn;
 	
 	Vector<Vector<String>> availableOrderList;
 	
@@ -51,17 +51,17 @@ public class AvailableOrderPage extends View{
 		
 		avaiOrderPanel = new JPanel(new BorderLayout());
 		avaiOrderPanel.setBackground(Color.ORANGE);
-		avaiOrderPanel.setBorder(new EmptyBorder(20, 0, 50, 0));
+		avaiOrderPanel.setBorder(new EmptyBorder(30, 0, 50, 0));
 		
 		orderPanel = new JPanel(new BorderLayout());
 		orderPanel.setBackground(Color.ORANGE);
 		orderPanel.setBorder(new EmptyBorder(0, 0, 50, 0));
 		
-		navPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		navPanel.setBackground(Color.ORANGE);
+		homePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		homePanel.setBackground(Color.ORANGE);
 		
-		orderHistoryBtn = new JButton("Order History");
-		orderHistoryBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		homeBtn = new JButton("Home");
+		homeBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		
 		table = new JTable();
 		table.setBackground(Color.ORANGE);
@@ -99,13 +99,11 @@ public class AvailableOrderPage extends View{
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
-		scrollPane.setBounds(0, 20, 490, 100);
 		scrollPane.setBackground(Color.ORANGE);
 		
 		tablePanel = new JPanel();
-		tablePanel.setBorder(null);
 		tablePanel.setBackground(Color.ORANGE);
-		tablePanel.setLayout(null);
+		tablePanel.setBorder(new EmptyBorder(0, 20, 0, 40));
 		
 		title = new JLabel("Available Order");
 		title.setBounds(10, 140, 50, 20);
@@ -118,33 +116,55 @@ public class AvailableOrderPage extends View{
 		name.setBounds(60, 180, 200, 20);
 		name.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		
+		footPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		footPanel.setBackground(Color.ORANGE);
+		footPanel.setBorder(new EmptyBorder(0, 120, 0, 120));
+		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
-		btnPanel.setBorder(new EmptyBorder(0, 20, 0, 20));
+		
+		confirmPanel = new JPanel(new GridLayout(1, 3, 0, 0));
+		confirmPanel.setBackground(Color.ORANGE);
+		confirmPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+		confirmPanel.setVisible(false);
 		
 		accBtn = new JButton("Accept");
 		accBtn.setBounds(10, 140, 50, 20);
 		accBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		accBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		
+		confirmLabel = new JLabel("Are you sure?");
+		confirmLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		
+		yesBtn = new JButton("Yes");
+		yesBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		noBtn = new JButton("No");
+		noBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
 	}
 
 	@Override
 	public void addComponent() {
-		navPanel.add(orderHistoryBtn);
+		homePanel.add(homeBtn);
 		
 		tablePanel.add(id);
 		tablePanel.add(name);
 		tablePanel.add(scrollPane);
 		
-		btnPanel.add(accBtn);
+		confirmPanel.add(confirmLabel);
+		confirmPanel.add(yesBtn);
+		confirmPanel.add(noBtn);
+		
+		footPanel.add(accBtn);
+		footPanel.add(confirmPanel);
 		
 		orderPanel.add(tablePanel, BorderLayout.CENTER);
 		
 		avaiOrderPanel.add(title, BorderLayout.NORTH);
 		avaiOrderPanel.add(orderPanel, BorderLayout.CENTER);
-		avaiOrderPanel.add(btnPanel, BorderLayout.SOUTH);
+		avaiOrderPanel.add(footPanel, BorderLayout.SOUTH);
 		
-		contentPane.add(navPanel, BorderLayout.NORTH);
+		contentPane.add(homePanel, BorderLayout.NORTH);
+		contentPane.add(homePanel, BorderLayout.NORTH);
 		contentPane.add(avaiOrderPanel, BorderLayout.CENTER);
 	}
 
@@ -188,17 +208,33 @@ public class AvailableOrderPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				confirmPanel.setVisible(true);
+			}
+		});
+		
+		homeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new HomeDriverPage().showForm();
+			}
+		});
+		
+		yesBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new DriverDetailOrderPage().showForm();
 			}
 		});
 		
-		orderHistoryBtn.addActionListener(new ActionListener() {
+		noBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new DriverOrderHistoryPage().showForm();
+				confirmPanel.setVisible(false);
 			}
 		});
 	}

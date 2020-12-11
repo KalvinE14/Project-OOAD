@@ -67,7 +67,7 @@ public class InitialPage extends View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new LoginPage().showForm();
+				new LoginMenuPage().showForm();
 			}
 		});
 		
