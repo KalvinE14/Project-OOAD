@@ -12,22 +12,30 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import controller.OrderDetailController;
+import model.OrderDetailModel;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class TakenOrderDetailPage extends View{
 
-	JPanel contentPane, navPanel, takenDetailPanel, orderPanel, footerPanel;
-	
+	JPanel contentPane, navPanel, takenDetailPanel, tablePanel, footerPanel, btnPanel;
 	JLabel title, msg;
-	JLabel orderIdValue, usernameValue, foodNameValue, orderTimeValue, orderStatusValue;
-	JLabel orderIdLabel, usernameLabel, foodNameLabel, orderTimeLabel, orderStatusLabel;
-	
-	Vector<String> orderData;
-	
+	JTable table;
+	JScrollPane scrollPane;
 	JButton confirmBtn, finishBtn, homeBtn;
+	
+	Vector<Vector<String>> orderData;
+	
+	Vector<String> detail, header;
 	
 	public TakenOrderDetailPage() {
 		super();
@@ -51,46 +59,45 @@ public class TakenOrderDetailPage extends View{
 		takenDetailPanel = new JPanel(new BorderLayout());
 		takenDetailPanel.setBackground(Color.ORANGE);
 		
-		orderPanel = new JPanel(new GridLayout(5, 2, -100, 0));
-		orderPanel.setBackground(Color.ORANGE);
-		orderPanel.setBorder(new EmptyBorder(30, 60, 50, 0));
+		tablePanel = new JPanel();
+		tablePanel.setBackground(Color.ORANGE);
+		tablePanel.setBorder(new EmptyBorder(0, 0, 50, 0));
 		
 		footerPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footerPanel.setBackground(Color.ORANGE);
-		footerPanel.setBorder(new EmptyBorder(0, 175, 0, 175));
+		footerPanel.setBorder(new EmptyBorder(50, 175, 0, 175));
+		
+		btnPanel = new JPanel();
+		btnPanel.setBackground(Color.ORANGE);
 		
 		homeBtn = new JButton("Home");
 		homeBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		
-		title = new JLabel("Order Detail");
+		title = new JLabel("Taken Order Detail");
 		title.setBounds(10, 140, 50, 20);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		
-		orderIdLabel = new JLabel("Order ID : ");
-		orderIdLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		usernameLabel = new JLabel("Username : ");
-		usernameLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		orderTimeLabel = new JLabel("Order Time : ");
-		orderTimeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		orderStatusLabel = new JLabel("Status : ");
-		orderStatusLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		foodNameLabel = new JLabel("Food Name : ");
-		foodNameLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		table = new JTable();
+		table.setBackground(Color.ORANGE);
 		
-		getOrderData();
-		
-		confirmBtn = new JButton("Confirm");
-		confirmBtn.setBounds(10, 140, 50, 20);
-		confirmBtn.setHorizontalAlignment(SwingConstants.CENTER);
-		confirmBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		scrollPane = new JScrollPane();
+		scrollPane.setViewportView(table);
+		scrollPane.setBackground(Color.ORANGE);
 		
 		finishBtn = new JButton("Finish");
 		finishBtn.setBounds(10, 140, 50, 20);
 		finishBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		finishBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		
-		msg = new JLabel("Order finish!");
+		confirmBtn = new JButton("Confirm");
+		confirmBtn.setBounds(10, 140, 50, 20);
+		confirmBtn.setHorizontalAlignment(SwingConstants.CENTER);
+		confirmBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		
+		checkStatus();
+		
+		msg = new JLabel();
 		msg.setHorizontalAlignment(SwingConstants.CENTER);
 		msg.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		msg.setVisible(false);
@@ -98,28 +105,25 @@ public class TakenOrderDetailPage extends View{
 
 	@Override
 	public void addComponent() {
-		orderPanel.add(orderIdLabel);
-		orderPanel.add(orderIdValue);
-		orderPanel.add(usernameLabel);
-		orderPanel.add(usernameValue);
-		orderPanel.add(foodNameLabel);
-		orderPanel.add(foodNameValue);
-		orderPanel.add(orderTimeLabel);
-		orderPanel.add(orderTimeValue);
-		orderPanel.add(orderStatusLabel);
-		orderPanel.add(orderStatusValue);
+
+		tablePanel.add(scrollPane);
 		
-		footerPanel.add(confirmBtn);
+		btnPanel.add(confirmBtn);
+		btnPanel.add(finishBtn);
+		
+		footerPanel.add(btnPanel);
 		footerPanel.add(msg);
 		
 		takenDetailPanel.add(title, BorderLayout.NORTH);
-		takenDetailPanel.add(orderPanel, BorderLayout.CENTER);
+		takenDetailPanel.add(tablePanel, BorderLayout.CENTER);
 		takenDetailPanel.add(footerPanel, BorderLayout.SOUTH);
 		
 		navPanel.add(homeBtn);
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(takenDetailPanel, BorderLayout.CENTER);
+		
+		loadData();
 	}
 
 	@Override
@@ -128,9 +132,10 @@ public class TakenOrderDetailPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				dispose();
-//				new DriverOrderHistoryPage().showForm();
+				OrderDetailController.getInstance().updateStatus();
+				msg.setText("User's order has  been ordered to the restaurant");
 				msg.setVisible(true);
+				confirmBtn.setVisible(false);
 			}
 		});
 		
@@ -138,7 +143,10 @@ public class TakenOrderDetailPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				OrderDetailController.getInstance().updateStatus();
+				msg.setText("Order finish!");
 				msg.setVisible(true);
+				finishBtn.setVisible(false);
 			}
 		});
 		
@@ -153,18 +161,59 @@ public class TakenOrderDetailPage extends View{
 		
 	}
 	
-	private void getOrderData()
+	private void checkStatus()
 	{
-		orderIdValue = new JLabel("1");
-		orderIdValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		usernameValue = new JLabel("Jack");
-		usernameValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		orderTimeValue = new JLabel("Sunday, 11 December 2020");
-		orderTimeValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		orderStatusValue = new JLabel("Ordered");
-		orderStatusValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		foodNameValue = new JLabel("Nasi Kuning");
-		foodNameValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		if(OrderDetailController.getInstance().isStatusAccepted())
+		{
+			confirmBtn.setVisible(true);
+			finishBtn.setVisible(false);
+			
+			return;
+		}
+		
+		if(OrderDetailController.getInstance().isStatusCooked())
+		{
+			confirmBtn.setVisible(false);
+			finishBtn.setVisible(true);
+			
+			return;
+		}
+		
+		confirmBtn.setVisible(false);
+		finishBtn.setVisible(false);
+	}
+	
+	private void loadData()
+	{
+		orderData = new Vector<>();
+		
+		header = new Vector<>();
+		header.add("Order ID");
+		header.add("Food ID");
+		header.add("Quantity");
+		
+		Vector<Model> list = OrderDetailController.getInstance().getDetailByOrderId();
+		
+		for (Model model : list) {
+			OrderDetailModel orderModel = (OrderDetailModel) model;
+			
+			detail = new Vector<>();
+			detail.add(orderModel.getOrderId().toString());
+			detail.add(orderModel.getFoodId().toString());
+			detail.add(orderModel.getQty().toString());
+			
+			orderData.add(detail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(orderData, header){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		table.setModel(dtm);
 	}
 
 }

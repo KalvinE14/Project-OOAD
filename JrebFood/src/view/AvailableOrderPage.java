@@ -21,6 +21,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class AvailableOrderPage extends View{
@@ -28,7 +31,7 @@ public class AvailableOrderPage extends View{
 	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, footPanel, btnPanel, confirmPanel, homePanel;
 	JTable table;
 	JScrollPane scrollPane;
-	JLabel title, id, name, foodName, qty, foodPrice, confirmLabel;
+	JLabel title, id, name, foodName, qty, foodPrice, confirmLabel, orderIdLabel;
 	JButton accBtn, orderHistoryBtn, yesBtn, noBtn, homeBtn;
 	
 	Vector<Vector<String>> availableOrderList;
@@ -65,37 +68,6 @@ public class AvailableOrderPage extends View{
 		
 		table = new JTable();
 		table.setBackground(Color.ORANGE);
-		
-		availableOrderList = new Vector<>();
-		
-		header = new Vector<>();
-		header.add("Product ID");
-		header.add("Username");
-		header.add("Order Time");
-		
-		detail = new Vector<>();
-		detail.add("1");
-		detail.add("Jack");
-		detail.add("Sunday, 11 December 2020");
-		
-		availableOrderList.add(detail);
-		
-		detail = new Vector<>();
-		detail.add("2");
-		detail.add("Rick");
-		detail.add("Monday, 12 December 2020");
-		
-		availableOrderList.add(detail);
-		
-		DefaultTableModel dtm = new DefaultTableModel(availableOrderList, header){
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-		
-		table.setModel(dtm);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
@@ -166,6 +138,8 @@ public class AvailableOrderPage extends View{
 		contentPane.add(homePanel, BorderLayout.NORTH);
 		contentPane.add(homePanel, BorderLayout.NORTH);
 		contentPane.add(avaiOrderPanel, BorderLayout.CENTER);
+		
+		loadData();
 	}
 
 	@Override
@@ -198,9 +172,11 @@ public class AvailableOrderPage extends View{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				int row = table.getSelectedRow();
+				int row = table.getSelectedRow();
 				
+				orderIdLabel = new JLabel();
 				
+				orderIdLabel.setText(table.getValueAt(row, 0).toString());
 			}
 		});
 		
@@ -225,8 +201,11 @@ public class AvailableOrderPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new DriverDetailOrderPage().showForm();
+				if(orderIdLabel != null)
+				{
+					dispose();
+					OrderController.getInstance().viewDetailOrderByDriver(Integer.parseInt(orderIdLabel.getText()));
+				}
 			}
 		});
 		
@@ -238,5 +217,39 @@ public class AvailableOrderPage extends View{
 			}
 		});
 	}
-
+	
+	private void loadData()
+	{
+		availableOrderList = new Vector<>();
+		
+		header = new Vector<>();
+		header.add("Order ID");
+		header.add("User ID");
+		header.add("Address");
+		header.add("Order Time");
+		
+		Vector<Model> list = OrderController.getInstance().getAllAvailableOrder();
+		
+		for (Model model : list) {
+			OrderModel orderModel = (OrderModel) model;
+			
+			detail = new Vector<>();
+			detail.add(orderModel.getOrderId().toString());
+			detail.add(orderModel.getUserId().toString());
+			detail.add(orderModel.getAddress());
+			detail.add(orderModel.getOrderDate());
+			
+			availableOrderList.add(detail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(availableOrderList, header){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		table.setModel(dtm);
+	}
 }

@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -18,21 +20,21 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class DriverOrderHistoryPage extends View{
 
-	JPanel contentPane, historyPanel, navPanel, orderHistoryPanel, orderDetailHistoryPanel, orderTablePanel, detailTablePanel;
-	JTable orderHistoryTable, orderDetailHistoryTable;
-	JLabel title, orderHistoryLabel, orderDetailHistoryLabel;
-	JScrollPane orderHistoryScrollPane, orderDetailHistoryScrollPane;
-	JButton homeBtn;
+	JPanel contentPane, navPanel, orderHistoryPanel, orderTablePanel, btnPanel;
+	JTable orderHistoryTable;
+	JLabel title, orderIdLabel;
+	JScrollPane orderHistoryScrollPane;
+	JButton homeBtn, detailBtn;
 	
 	Vector<Vector<String>> orderHistoryData;
 	Vector<String> orderHistoryHeader, orderHistoryDetail;
-	
-	Vector<Vector<String>> orderDetailHistoryData;
-	Vector<String> orderDetailHistoryHeader, orderDetailHistoryDetail;
 	
 	public DriverOrderHistoryPage() {
 		super();
@@ -46,11 +48,9 @@ public class DriverOrderHistoryPage extends View{
 		
 		initPanel();
 		
-		initNavigation();
+		initButton();
 		
 		initOrderHistoryTable();
-		
-		initOrderDetailHistoryTable();
 		
 		initLabel();
 	}
@@ -62,113 +62,35 @@ public class DriverOrderHistoryPage extends View{
 		
 		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		navPanel.setBackground(Color.ORANGE);
+		navPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
 		
-		historyPanel = new JPanel(new GridLayout(2, 1, 0, 0));
-		historyPanel.setBackground(Color.ORANGE);
-		historyPanel.setBorder(new EmptyBorder(20, 20, 100, 20));
-		
-		orderHistoryPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		orderHistoryPanel = new JPanel(new BorderLayout());
 		orderHistoryPanel.setBackground(Color.ORANGE);
-		orderDetailHistoryPanel = new JPanel(new GridLayout(2, 1, 0, 0));
-		orderDetailHistoryPanel.setBackground(Color.ORANGE);
+		
 		orderTablePanel = new JPanel();
 		orderTablePanel.setBackground(Color.ORANGE);
-		detailTablePanel = new JPanel();
-		detailTablePanel.setBackground(Color.ORANGE);
+		
+		btnPanel = new JPanel();
+		btnPanel.setBackground(Color.ORANGE);
+		btnPanel.setBorder(new EmptyBorder(30, 0, 30, 0));
 	}
 
-	private void initNavigation() {
+	private void initButton() {
 		homeBtn = new JButton("Home");
 		homeBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		detailBtn = new JButton("Detail");
+		detailBtn.setFont(new Font("Segoe UI", Font.BOLD, 18));
 	}
 
 	private void initOrderHistoryTable() {
 		orderHistoryTable = new JTable();
 		orderHistoryTable.setBackground(Color.ORANGE);
-
-		orderHistoryData = new Vector<>();
-		
-		orderHistoryHeader = new Vector<>();
-		orderHistoryHeader.add("Product ID");
-		orderHistoryHeader.add("Username");
-		orderHistoryHeader.add("Order Time");
-		orderHistoryHeader.add("Status");
-		
-		orderHistoryDetail = new Vector<>();
-		orderHistoryDetail.add("1");
-		orderHistoryDetail.add("Jack");
-		orderHistoryDetail.add("Sunday, 11 December 2020");
-		orderHistoryDetail.add("Finished");
-		
-		orderHistoryData.add(orderHistoryDetail);
-		
-		orderHistoryDetail = new Vector<>();
-		orderHistoryDetail.add("2");
-		orderHistoryDetail.add("Rick");
-		orderHistoryDetail.add("Monday, 12 December 2020");
-		orderHistoryDetail.add("Finished");
-
-		orderHistoryData.add(orderHistoryDetail);
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderHistoryData, orderHistoryHeader){
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-		
-		orderHistoryTable.setModel(dtm);
-		
 		
 		orderHistoryScrollPane = new JScrollPane();
 		orderHistoryScrollPane.setViewportView(orderHistoryTable);
 		orderHistoryScrollPane.setBounds(0, 20, 490, 100);
 		orderHistoryScrollPane.setBackground(Color.ORANGE);
-	}
-
-	private void initOrderDetailHistoryTable() {
-		orderDetailHistoryTable = new JTable();
-		orderDetailHistoryTable.setBackground(Color.ORANGE);
-		
-		orderDetailHistoryData = new Vector<>();
-		
-		orderDetailHistoryHeader = new Vector<>();
-		orderDetailHistoryHeader.add("Product ID");
-		orderDetailHistoryHeader.add("Username");
-		orderDetailHistoryHeader.add("Order Time");
-		orderDetailHistoryHeader.add("Status");
-		
-		orderDetailHistoryDetail = new Vector<>();
-		orderDetailHistoryDetail.add("1");
-		orderDetailHistoryDetail.add("Jack");
-		orderDetailHistoryDetail.add("Sunday, 11 December 2020");
-		orderDetailHistoryDetail.add("Finished");
-		
-		orderDetailHistoryData.add(orderDetailHistoryDetail);
-		
-		orderDetailHistoryHeader = new Vector<>();
-		orderDetailHistoryHeader.add("2");
-		orderDetailHistoryHeader.add("Rick");
-		orderDetailHistoryHeader.add("Monday, 12 December 2020");
-		orderDetailHistoryHeader.add("Finished");
-
-		orderDetailHistoryData.add(orderDetailHistoryDetail);
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderDetailHistoryData, orderDetailHistoryHeader){
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-		
-		orderDetailHistoryTable.setModel(dtm);
-		
-		orderDetailHistoryScrollPane = new JScrollPane();
-		orderDetailHistoryScrollPane.setViewportView(orderDetailHistoryTable);
-		orderDetailHistoryScrollPane.setBounds(0, 20, 490, 100);
-		orderDetailHistoryScrollPane.setBackground(Color.ORANGE);
 	}
 
 	@Override
@@ -177,20 +99,16 @@ public class DriverOrderHistoryPage extends View{
 		
 		orderTablePanel.add(orderHistoryScrollPane);
 		
-		detailTablePanel.add(orderDetailHistoryScrollPane);
+		btnPanel.add(detailBtn);
 		
-		orderHistoryPanel.add(orderHistoryLabel);
-		orderHistoryPanel.add(orderHistoryScrollPane);
-
-		orderDetailHistoryPanel.add(orderDetailHistoryLabel);
-		orderDetailHistoryPanel.add(orderDetailHistoryScrollPane);
-		
-		historyPanel.add(orderHistoryPanel, BorderLayout.CENTER);
-		historyPanel.add(orderDetailHistoryPanel, BorderLayout.SOUTH);
+		orderHistoryPanel.add(title, BorderLayout.NORTH);
+		orderHistoryPanel.add(orderTablePanel, BorderLayout.CENTER);
+		orderHistoryPanel.add(btnPanel, BorderLayout.SOUTH);
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
-		contentPane.add(historyPanel, BorderLayout.CENTER);
+		contentPane.add(orderHistoryPanel, BorderLayout.CENTER);
 		
+		loadData();
 	}
 
 	@Override
@@ -203,19 +121,98 @@ public class DriverOrderHistoryPage extends View{
 				new HomeDriverPage().showForm();
 			}
 		});
+		
+		detailBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(orderIdLabel != null)
+				{
+					dispose();
+					OrderController.getInstance().viewDriverDetailOrderHistory(Integer.parseInt(orderIdLabel.getText()));
+				}
+			}
+		});
+		
+		orderHistoryTable.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = orderHistoryTable.getSelectedRow();
+				
+				orderIdLabel = new JLabel();
+				
+				orderIdLabel.setText(orderHistoryTable.getValueAt(row, 0).toString());
+			}
+		});
 	}
 	
 	private void initLabel()
 	{
-		orderHistoryLabel = new JLabel("Order History");
-		orderHistoryLabel.setBounds(10, 140, 50, 20);
-		orderHistoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		orderHistoryLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		title = new JLabel("Order History");
+		title.setBounds(10, 140, 50, 20);
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+	}
+	
+	private void loadData()
+	{
+		orderHistoryData = new Vector<>();
 		
-		orderDetailHistoryLabel = new JLabel("Order Detail History");
-		orderDetailHistoryLabel.setBounds(10, 140, 50, 20);
-		orderDetailHistoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		orderDetailHistoryLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		orderHistoryHeader = new Vector<>();
+		orderHistoryHeader.add("Order ID");
+		orderHistoryHeader.add("Date");
+		orderHistoryHeader.add("User ID");
+		orderHistoryHeader.add("Address");
+		
+		Vector<Model> list = OrderController.getInstance().getAllDriverOrderHistory();
+		
+		for (Model model : list) {
+			OrderModel orderModel = (OrderModel) model;
+			
+			orderHistoryDetail = new Vector<>();
+			orderHistoryDetail.add(orderModel.getOrderId().toString());
+			orderHistoryDetail.add(orderModel.getOrderDate());
+			orderHistoryDetail.add(orderModel.getUserId().toString());
+			orderHistoryDetail.add(orderModel.getAddress());
+			orderHistoryDetail.add(orderModel.getStatus());
+			
+			orderHistoryData.add(orderHistoryDetail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(orderHistoryData, orderHistoryHeader){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		orderHistoryTable.setModel(dtm);
 	}
 
 }

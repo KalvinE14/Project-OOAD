@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import controller.EmployeeController;
 import view.core.View;
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -96,7 +97,9 @@ public class LoginEmployeePage extends View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new HomeDriverPage().showForm();
+				EmployeeController controller = EmployeeController.getInstance();
+				
+				controller.authenticateEmployee(emailValue.getText(), new String(passwordValue.getPassword()));
 			}
 		});
 		

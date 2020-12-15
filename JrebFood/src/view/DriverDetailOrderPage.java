@@ -18,6 +18,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import controller.OrderDetailController;
+import model.OrderDetailModel;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class DriverDetailOrderPage extends View{
@@ -80,6 +85,8 @@ public class DriverDetailOrderPage extends View{
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(infoPanel, BorderLayout.CENTER);
+		
+		loadData();
 	}
 
 	@Override
@@ -181,31 +188,35 @@ public class DriverDetailOrderPage extends View{
 		orderDetailTable = new JTable();
 		orderDetailTable.setBackground(Color.ORANGE);
 		
+		orderScrollPane = new JScrollPane();
+		orderScrollPane.setViewportView(orderDetailTable);
+		orderScrollPane.setBounds(0, 20, 490, 100);
+		orderScrollPane.setBackground(Color.ORANGE);
+	}
+	
+	private void loadData()
+	{
 		orderDetailData = new Vector<>();
 		
 		orderHeader = new Vector<>();
 		orderHeader.add("Order ID");
-		orderHeader.add("Food Name");
-		orderHeader.add("Food Price");
+		orderHeader.add("Food ID");
 		orderHeader.add("Quantity");
 		
-		orderDetail = new Vector<>();
-		orderDetail.add("1");
-		orderDetail.add("Fried Rice");
-		orderDetail.add("Rp. 10000");
-		orderDetail.add("2");
+		Vector<Model> list = OrderDetailController.getInstance().getDetailByOrderId();
 		
-		orderDetailData.add(orderDetail);
+		for (Model model : list) {
+			OrderDetailModel orderDetailModel = (OrderDetailModel) model;
+			
+			orderDetail = new Vector<>();
+			orderDetail.add(orderDetailModel.getOrderId().toString());
+			orderDetail.add(orderDetailModel.getFoodId().toString());
+			orderDetail.add(orderDetailModel.getQty().toString());
+			
+			orderDetailData.add(orderDetail);
+		}
 		
-		orderDetail = new Vector<>();
-		orderDetail.add("2");
-		orderDetail.add("Spaghetti");
-		orderDetail.add("Rp. 20000");
-		orderDetail.add("1");
-		
-		orderDetailData.add(orderDetail);
-		
-		DefaultTableModel dtmOrder = new DefaultTableModel(orderDetailData, orderHeader){
+		DefaultTableModel dtm = new DefaultTableModel(orderDetailData, orderHeader){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -213,11 +224,6 @@ public class DriverDetailOrderPage extends View{
 			}
 		};
 		
-		orderDetailTable.setModel(dtmOrder);
-		
-		orderScrollPane = new JScrollPane();
-		orderScrollPane.setViewportView(orderDetailTable);
-		orderScrollPane.setBounds(0, 20, 490, 100);
-		orderScrollPane.setBackground(Color.ORANGE);
+		orderDetailTable.setModel(dtm);
 	}
 }

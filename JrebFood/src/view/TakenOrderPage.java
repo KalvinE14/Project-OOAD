@@ -21,6 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import controller.OrderDetailController;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class TakenOrderPage extends View{
@@ -28,7 +32,7 @@ public class TakenOrderPage extends View{
 	JPanel contentPane, navPanel, takenOrderPanel, tablePanel, btnPanel;
 	JTable table;
 	JScrollPane scrollPane;
-	JLabel title, id, name, foodName, qty, foodPrice, confirmLabel;
+	JLabel title, statusLabel, orderIdLabel;
 	JButton detailBtn, homeBtn;
 	
 	Vector<Vector<String>> takenOrderList;
@@ -70,43 +74,6 @@ public class TakenOrderPage extends View{
 		table = new JTable();
 		table.setBackground(Color.ORANGE);
 		
-		takenOrderList = new Vector<>();
-		
-		header = new Vector<>();
-		header.add("Order ID");
-		header.add("Date");
-		header.add("Username");
-		header.add("Address");
-		header.add("Status");
-		
-		detail = new Vector<>();
-		detail.add("1");
-		detail.add("11/12/2020");
-		detail.add("Jack");
-		detail.add("Earth");
-		detail.add("Ordered");
-		
-		takenOrderList.add(detail);
-		
-		detail = new Vector<>();
-		detail.add("2");
-		detail.add("12/12/2020");
-		detail.add("Rick");
-		detail.add("Mars");
-		detail.add("Accepted");
-		
-		takenOrderList.add(detail);
-		
-		DefaultTableModel dtm = new DefaultTableModel(takenOrderList, header){
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-		
-		table.setModel(dtm);
-		
 		scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
 		scrollPane.setBackground(Color.ORANGE);
@@ -115,17 +82,13 @@ public class TakenOrderPage extends View{
 		title.setBounds(10, 140, 50, 20);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
-//		id = new JLabel();
-//		id.setBounds(60, 140, 200, 20);
-//		id.setFont(new Font("Segoe UI", Font.BOLD, 24));
-//		name = new JLabel();
-//		name.setBounds(60, 180, 200, 20);
-//		name.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
 		detailBtn = new JButton("Detail");
 		detailBtn.setBounds(10, 140, 50, 20);
 		detailBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		detailBtn.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		
+		
 	}
 
 	@Override
@@ -142,6 +105,8 @@ public class TakenOrderPage extends View{
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(takenOrderPanel, BorderLayout.CENTER);
+		
+		loadData();
 	}
 
 	@Override
@@ -174,9 +139,13 @@ public class TakenOrderPage extends View{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				int row = table.getSelectedRow();
+				int row = table.getSelectedRow();
 				
+				statusLabel = new JLabel();
+				orderIdLabel = new JLabel();
 				
+				statusLabel.setText(table.getValueAt(row, 4).toString());
+				orderIdLabel.setText(table.getValueAt(row, 0).toString());
 			}
 		});
 		
@@ -184,8 +153,11 @@ public class TakenOrderPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new TakenOrderDetailPage().showForm();
+				if(statusLabel != null && orderIdLabel != null)
+				{
+					dispose();
+					OrderController.getInstance().viewDetailTakenOrder(statusLabel.getText(), Integer.parseInt(orderIdLabel.getText()));
+				}
 			}
 		});
 		
@@ -197,6 +169,43 @@ public class TakenOrderPage extends View{
 				new HomeDriverPage().showForm();
 			}
 		});
+	}
+	
+	private void loadData()
+	{
+		takenOrderList = new Vector<>();
+		
+		header = new Vector<>();
+		header.add("Order ID");
+		header.add("Date");
+		header.add("User ID");
+		header.add("Address");
+		header.add("Status");
+		
+		Vector<Model> list = OrderController.getInstance().getAllTakenOrder();
+		
+		for (Model model : list) {
+			OrderModel orderModel = (OrderModel) model;
+			
+			detail = new Vector<>();
+			detail.add(orderModel.getOrderId().toString());
+			detail.add(orderModel.getOrderDate());
+			detail.add(orderModel.getUserId().toString());
+			detail.add(orderModel.getAddress());
+			detail.add(orderModel.getStatus());
+			
+			takenOrderList.add(detail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(takenOrderList, header){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		table.setModel(dtm);
 	}
 
 }
