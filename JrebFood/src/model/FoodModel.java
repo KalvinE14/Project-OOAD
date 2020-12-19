@@ -59,6 +59,24 @@ public class FoodModel extends Model {
 		return null;
 	}
 	
+	public String getNameById(Integer foodId) {
+		String query = String.format("SELECT * FROM %s WHERE foodId = %d", tableName,foodId);
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			String foodName = "";
+			if(rs.next()) {
+				foodName = rs.getString("name");
+			}
+			
+			return foodName;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+	
 	public Integer getFoodId() {
 		return foodId;
 	}

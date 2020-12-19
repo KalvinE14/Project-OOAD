@@ -65,12 +65,12 @@ public class CartModel extends Model {
 	
 	public void insertCart(int userId, int foodId) {
 		Vector<Vector<Object>> data = getAllJoinedCart(userId);
-		
+		FoodModel foodModel = new FoodModel();
 		int counter = 0;
 		
 		if(data.size() != 0) {
 			for (int i = 0; i < data.size(); i++) {
-				if(data.get(i).contains(foodId)) {
+				if(data.get(i).get(2).equals(foodModel.getNameById(foodId))) {
 					String query = String.format("UPDATE %s SET qty = qty + 1 WHERE userId = %d AND foodId = %d", tableName, userId, foodId);
 					con.executeUpdate(query);
 					counter++;
