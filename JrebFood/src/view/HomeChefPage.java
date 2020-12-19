@@ -80,7 +80,7 @@ public class HomeChefPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new ViewOrderPage().showForm();
+				new OrderQueuePage().showForm();
 				
 			}
 		});

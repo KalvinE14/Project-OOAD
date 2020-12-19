@@ -8,7 +8,7 @@ public class Main {
 
 	public Main() {
 		new InitialPage().showForm();
-//		new HomeChefPage().showForm();
+		new HomeChefPage().showForm();
 //		new HomeManagerPage().showForm();
 //		Connect.getConnection();
 	}

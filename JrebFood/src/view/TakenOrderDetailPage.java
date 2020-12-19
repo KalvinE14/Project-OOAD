@@ -27,7 +27,7 @@ import view.core.View;
 
 public class TakenOrderDetailPage extends View{
 
-	JPanel contentPane, navPanel, takenDetailPanel, tablePanel, footerPanel, btnPanel;
+	JPanel contentPane, navPanel, takenDetailPanel, footerPanel, btnPanel;
 	JLabel title, msg;
 	JTable table;
 	JScrollPane scrollPane;
@@ -58,10 +58,7 @@ public class TakenOrderDetailPage extends View{
 		
 		takenDetailPanel = new JPanel(new BorderLayout());
 		takenDetailPanel.setBackground(Color.ORANGE);
-		
-		tablePanel = new JPanel();
-		tablePanel.setBackground(Color.ORANGE);
-		tablePanel.setBorder(new EmptyBorder(0, 0, 50, 0));
+		takenDetailPanel.setBorder(new EmptyBorder(0, 30, 0, 30));
 		
 		footerPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footerPanel.setBackground(Color.ORANGE);
@@ -105,9 +102,6 @@ public class TakenOrderDetailPage extends View{
 
 	@Override
 	public void addComponent() {
-
-		tablePanel.add(scrollPane);
-		
 		btnPanel.add(confirmBtn);
 		btnPanel.add(finishBtn);
 		
@@ -115,7 +109,7 @@ public class TakenOrderDetailPage extends View{
 		footerPanel.add(msg);
 		
 		takenDetailPanel.add(title, BorderLayout.NORTH);
-		takenDetailPanel.add(tablePanel, BorderLayout.CENTER);
+		takenDetailPanel.add(scrollPane, BorderLayout.CENTER);
 		takenDetailPanel.add(footerPanel, BorderLayout.SOUTH);
 		
 		navPanel.add(homeBtn);

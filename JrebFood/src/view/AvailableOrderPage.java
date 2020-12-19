@@ -28,7 +28,7 @@ import view.core.View;
 
 public class AvailableOrderPage extends View{
 
-	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, tablePanel, detailPanel, footPanel, btnPanel, confirmPanel, homePanel;
+	JPanel contentPane, avaiOrderPanel, orderPanel, detailContainerPanel, detailPanel, footPanel, btnPanel, confirmPanel, homePanel;
 	JTable table;
 	JScrollPane scrollPane;
 	JLabel title, id, name, foodName, qty, foodPrice, confirmLabel, orderIdLabel;
@@ -73,10 +73,6 @@ public class AvailableOrderPage extends View{
 		scrollPane.setViewportView(table);
 		scrollPane.setBackground(Color.ORANGE);
 		
-		tablePanel = new JPanel();
-		tablePanel.setBackground(Color.ORANGE);
-		tablePanel.setBorder(new EmptyBorder(0, 20, 0, 40));
-		
 		title = new JLabel("Available Order");
 		title.setBounds(10, 140, 50, 20);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -90,7 +86,7 @@ public class AvailableOrderPage extends View{
 		
 		footPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footPanel.setBackground(Color.ORANGE);
-		footPanel.setBorder(new EmptyBorder(0, 120, 0, 120));
+		footPanel.setBorder(new EmptyBorder(30, 120, 0, 120));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -118,10 +114,6 @@ public class AvailableOrderPage extends View{
 	public void addComponent() {
 		homePanel.add(homeBtn);
 		
-		tablePanel.add(id);
-		tablePanel.add(name);
-		tablePanel.add(scrollPane);
-		
 		confirmPanel.add(confirmLabel);
 		confirmPanel.add(yesBtn);
 		confirmPanel.add(noBtn);
@@ -129,10 +121,8 @@ public class AvailableOrderPage extends View{
 		footPanel.add(accBtn);
 		footPanel.add(confirmPanel);
 		
-		orderPanel.add(tablePanel, BorderLayout.CENTER);
-		
 		avaiOrderPanel.add(title, BorderLayout.NORTH);
-		avaiOrderPanel.add(orderPanel, BorderLayout.CENTER);
+		avaiOrderPanel.add(scrollPane, BorderLayout.CENTER);
 		avaiOrderPanel.add(footPanel, BorderLayout.SOUTH);
 		
 		contentPane.add(homePanel, BorderLayout.NORTH);

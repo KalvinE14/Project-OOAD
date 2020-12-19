@@ -27,7 +27,7 @@ import view.core.View;
 
 public class DriverDetailOrderPage extends View{
 
-	JPanel contentPane, navPanel, infoPanel, detailInfoPanel, btnPanel, custPanel, orderPanel, custTablePanel, ordTablePanel, custInfoPanel;
+	JPanel contentPane, navPanel, infoPanel, detailInfoPanel, btnPanel, custPanel, orderPanel, custInfoPanel;
 	JTable custInfoTable, orderDetailTable;
 	JLabel title, custLabel, orderDetailLabel, custNameLabel, custGenderLabel, custEmailLabel, custPhoneLabel, custAddressLabel;
 	JButton orderBtn, homeBtn;
@@ -65,13 +65,11 @@ public class DriverDetailOrderPage extends View{
 		custInfoPanel.add(custEmailLabel);
 		custInfoPanel.add(custAddressLabel);
 		
-		ordTablePanel.add(orderScrollPane);
-		
 		custPanel.add(custLabel);
 		custPanel.add(custInfoPanel);
 		
 		orderPanel.add(orderDetailLabel);
-		orderPanel.add(ordTablePanel);
+		orderPanel.add(orderScrollPane);
 		
 		detailInfoPanel.add(custPanel);
 		detailInfoPanel.add(orderPanel);
@@ -130,14 +128,10 @@ public class DriverDetailOrderPage extends View{
 		
 		orderPanel = new JPanel(new GridLayout(2, 1, 0, -25));
 		orderPanel.setBackground(Color.ORANGE);
-		orderPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+		orderPanel.setBorder(new EmptyBorder(20, 30, 0, 30));
 		
 		custInfoPanel = new JPanel(new GridLayout(5, 1, 0, 0));
 		custInfoPanel.setBackground(Color.ORANGE);
-		
-		ordTablePanel = new JPanel();
-		ordTablePanel.setBorder(null);
-		ordTablePanel.setBackground(Color.ORANGE);
 	}
 
 

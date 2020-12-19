@@ -29,7 +29,7 @@ import view.core.View;
 
 public class TakenOrderPage extends View{
 
-	JPanel contentPane, navPanel, takenOrderPanel, tablePanel, btnPanel;
+	JPanel contentPane, navPanel, takenOrderPanel, btnPanel;
 	JTable table;
 	JScrollPane scrollPane;
 	JLabel title, statusLabel, orderIdLabel;
@@ -58,11 +58,7 @@ public class TakenOrderPage extends View{
 		
 		takenOrderPanel = new JPanel(new BorderLayout());
 		takenOrderPanel.setBackground(Color.ORANGE);
-		takenOrderPanel.setBorder(new EmptyBorder(30, 0, 50, 0));
-		
-		tablePanel = new JPanel();
-		tablePanel.setBackground(Color.ORANGE);
-		tablePanel.setBorder(new EmptyBorder(0, 0, 50, 0));
+		takenOrderPanel.setBorder(new EmptyBorder(30, 30, 50, 30));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -95,12 +91,10 @@ public class TakenOrderPage extends View{
 	public void addComponent() {
 		navPanel.add(homeBtn);
 		
-		tablePanel.add(scrollPane);
-		
 		btnPanel.add(detailBtn);
 		
 		takenOrderPanel.add(title, BorderLayout.NORTH);
-		takenOrderPanel.add(tablePanel, BorderLayout.CENTER);
+		takenOrderPanel.add(scrollPane, BorderLayout.CENTER);
 		takenOrderPanel.add(btnPanel, BorderLayout.SOUTH);
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);

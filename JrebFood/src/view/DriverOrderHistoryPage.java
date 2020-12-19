@@ -27,7 +27,7 @@ import view.core.View;
 
 public class DriverOrderHistoryPage extends View{
 
-	JPanel contentPane, navPanel, orderHistoryPanel, orderTablePanel, btnPanel;
+	JPanel contentPane, navPanel, orderHistoryPanel, btnPanel;
 	JTable orderHistoryTable;
 	JLabel title, orderIdLabel;
 	JScrollPane orderHistoryScrollPane;
@@ -66,9 +66,7 @@ public class DriverOrderHistoryPage extends View{
 		
 		orderHistoryPanel = new JPanel(new BorderLayout());
 		orderHistoryPanel.setBackground(Color.ORANGE);
-		
-		orderTablePanel = new JPanel();
-		orderTablePanel.setBackground(Color.ORANGE);
+		orderHistoryPanel.setBorder(new EmptyBorder(0, 20, 0, 20));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -97,12 +95,10 @@ public class DriverOrderHistoryPage extends View{
 	public void addComponent() {
 		navPanel.add(homeBtn);
 		
-		orderTablePanel.add(orderHistoryScrollPane);
-		
 		btnPanel.add(detailBtn);
 		
 		orderHistoryPanel.add(title, BorderLayout.NORTH);
-		orderHistoryPanel.add(orderTablePanel, BorderLayout.CENTER);
+		orderHistoryPanel.add(orderHistoryScrollPane, BorderLayout.CENTER);
 		orderHistoryPanel.add(btnPanel, BorderLayout.SOUTH);
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
