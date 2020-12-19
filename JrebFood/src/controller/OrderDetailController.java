@@ -55,6 +55,16 @@ public class OrderDetailController extends Controller{
 		}
 	}
 	
+	public void addDetail(Integer orderId, Integer foodId, Integer qty) {
+		OrderDetailModel odm = new OrderDetailModel();
+		
+		odm.setOrderId(orderId);
+		odm.setFoodId(foodId);
+		odm.setQty(qty);
+		
+		odm.insert();
+	}
+	
 	public Vector<Model> getDetailByOrderId() {
 		return orderDetailModel.getDetailByOrderId(this.orderId);
 	}

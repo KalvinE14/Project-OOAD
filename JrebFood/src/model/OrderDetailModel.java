@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -10,7 +11,7 @@ public class OrderDetailModel extends Model{
 
 	private Integer orderId;
 	private Integer foodId;
-	private String qty;
+	private Integer qty;
 	
 	public OrderDetailModel() {
 		this.tableName = "order_details";
@@ -18,7 +19,20 @@ public class OrderDetailModel extends Model{
 
 	@Override
 	public void insert() {
+		String query = String.format("INSERT INTO %s VALUES(?, ?, ?)", tableName);
 		
+		PreparedStatement ps = con.prepStatement(query);
+		
+		try {
+			ps.setInt(1, orderId);
+			ps.setInt(2, foodId);
+			ps.setInt(3, qty);
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -27,11 +41,6 @@ public class OrderDetailModel extends Model{
 		
 	}
 
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Vector<Model> getAll() {
@@ -46,7 +55,7 @@ public class OrderDetailModel extends Model{
 				
 				odm.setOrderId(rs.getInt("orderId"));
 				odm.setFoodId(rs.getInt("foodId"));
-				odm.setQty(rs.getString("qty"));
+				odm.setQty(rs.getInt("qty"));
 				
 				orderDetailData.add(odm);
 			}
@@ -72,7 +81,7 @@ public class OrderDetailModel extends Model{
 				
 				odm.setOrderId(rs.getInt("orderId"));
 				odm.setFoodId(rs.getInt("foodId"));
-				odm.setQty(rs.getString("qty"));
+				odm.setQty(rs.getInt("qty"));
 				
 				orderDetailData.add(odm);
 			}
@@ -99,7 +108,7 @@ public class OrderDetailModel extends Model{
 				
 				odm.setOrderId(rs.getInt("orderId"));
 				odm.setFoodId(rs.getInt("foodId"));
-				odm.setQty(rs.getString("qty"));
+				odm.setQty(rs.getInt("qty"));
 				
 				orderDetailData.add(odm);
 			}
@@ -129,11 +138,11 @@ public class OrderDetailModel extends Model{
 		this.foodId = foodId;
 	}
 
-	public String getQty() {
+	public Integer getQty() {
 		return qty;
 	}
 
-	public void setQty(String qty) {
+	public void setQty(Integer qty) {
 		this.qty = qty;
 	}
 	

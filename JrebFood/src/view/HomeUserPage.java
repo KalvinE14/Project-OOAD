@@ -20,6 +20,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.CartController;
+import controller.FoodController;
+import model.FoodModel;
+import model.core.Model;
 import view.core.View;
 
 public class HomeUserPage extends View{
@@ -72,7 +76,6 @@ public class HomeUserPage extends View{
 		
 		table = new JTable();
 		
-		initFoodList();
 		loadFood();
 		
 		scroll = new JScrollPane();
@@ -89,41 +92,32 @@ public class HomeUserPage extends View{
 		btnAdd.setText("Add to Cart");
 	}
 	
-	public void initFoodList() {
-		foodList.add("Food1");
-		foodList.add("Food2");
-		foodList.add("Food3");
-		foodList.add("Food4");
-		foodList.add("Food5");
-		foodList.add("Food6");
-		foodList.add("Food7");
-		foodList.add("Food8");
-		foodList.add("Food9");
-		foodList.add("Food10");
-		foodList.add("Food11");
-		foodList.add("Food12");
-		foodList.add("Food13");
-		foodList.add("Food14");
-		foodList.add("Food15");
-		foodList.add("Food16");
-		foodList.add("Food17");
-		foodList.add("Food18");
-		foodList.add("Food19");
-		foodList.add("Food20");
-		foodList.add("Food21");
-		foodList.add("Food22");
-		foodList.add("Food23");
-		foodList.add("Food24");
-		foodList.add("Food25");
-		foodList.add("Food26");
-		foodList.add("Food27");
-		foodList.add("Food28");
-		foodList.add("Food29");
-	}
-	
 	public void loadFood() {
-		String header[] = {"Food"};
-		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+		Vector<String> header = new Vector<>();
+		header.add("Food ID");
+		header.add("Name");
+		header.add("Price");
+		header.add("Description");
+		
+		FoodController foodController = FoodController.getInstance();
+		Vector<Model> foods = foodController.getAllAvailableFood();
+		
+		Vector<Vector<String>> foodData = new Vector<>();
+		Vector<String> foodDetail;
+		
+		for (Model foodList : foods) {
+			FoodModel food = (FoodModel) foodList;
+			
+			foodDetail = new Vector<>();
+			foodDetail.add(food.getFoodId().toString());
+			foodDetail.add(food.getName());
+			foodDetail.add(food.getPrice().toString());
+			foodDetail.add(food.getDescription());
+			
+			foodData.add(foodDetail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(foodData, header) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -131,11 +125,6 @@ public class HomeUserPage extends View{
 			}
 		};
 		
-		for (String food : foodList) {
-			Vector<String> foods = new Vector<>();
-			foods.add(food);
-			dtm.addRow(foods);
-		}
 		table.setModel(dtm);
 	}
 	
@@ -179,6 +168,18 @@ public class HomeUserPage extends View{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new UserCurrentOrderPage().showForm();
+			}
+		});
+		
+		btnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CartController cartController = CartController.getInstance();
+				int row = table.getSelectedRow();
+				int foodId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				
+				cartController.addCart(foodId);
 			}
 		});
 	}

@@ -11,18 +11,21 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import controller.UserController;
 import view.core.View;
 
 public class RegisterPage extends View{
 	
 	private JPanel titlePanel, formPanel, btnPanel, genderPanel;
 	private JLabel titleLabel, emailLabel, passLabel, usernameLabel, addressLabel, phoneLabel, genderLabel;
-	private JTextField emailTxt, passTxt, usernameTxt, addressTxt, phoneTxt;
+	private JTextField emailTxt, usernameTxt, addressTxt, phoneTxt;
+	private JPasswordField passTxt;
 	private JRadioButton male, female;
 	private ButtonGroup gender;
 	private JButton btnRegister;
@@ -45,31 +48,21 @@ public class RegisterPage extends View{
 		titleLabel = new JLabel("Register");
 		titleLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
-		formPanel = new JPanel(new GridLayout(6, 2, 0, 25));
+		formPanel = new JPanel(new GridLayout(5, 2, 0, 25));
 		formPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
 		formPanel.setBackground(Color.ORANGE);
 		
 		emailLabel = new JLabel("Email");
 		passLabel = new JLabel("Password");
-		usernameLabel = new JLabel("Username");
+		usernameLabel = new JLabel("Name");
 		addressLabel = new JLabel("Address");
 		phoneLabel = new JLabel("Phone");
-		genderLabel = new JLabel("Gender");
 		
 		emailTxt = new JTextField();
-		passTxt = new JTextField();
+		passTxt = new JPasswordField();
 		usernameTxt = new JTextField();
 		addressTxt = new JTextField();
 		phoneTxt = new JTextField();
-		
-		male = new JRadioButton("Male");
-		male.setBackground(Color.ORANGE);
-		female = new JRadioButton("Female");
-		female.setBackground(Color.ORANGE);
-		
-		genderPanel = new JPanel();
-		genderPanel.setBackground(Color.ORANGE);
-		gender = new ButtonGroup();
 		
 		btnPanel = new JPanel();
 		btnPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
@@ -92,15 +85,7 @@ public class RegisterPage extends View{
 		formPanel.add(addressTxt);
 		formPanel.add(phoneLabel);
 		formPanel.add(phoneTxt);
-		formPanel.add(genderLabel);
 		
-		genderPanel.add(male);
-		genderPanel.add(female);
-		
-		gender.add(male);
-		gender.add(female);
-		
-		formPanel.add(genderPanel);
 		add(formPanel, BorderLayout.CENTER);
 		
 		btnPanel.add(btnRegister);
@@ -114,7 +99,9 @@ public class RegisterPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new RegisterSuccessPage().showForm();
+				
+				UserController userController = UserController.getInstance();
+				userController.validateRegistration(emailTxt.getText(), new String(passTxt.getPassword()), usernameTxt.getText(), addressTxt.getText(), phoneTxt.getText());
 			}
 		});
 	}

@@ -18,6 +18,10 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
+import controller.OrderDetailController;
+import model.OrderModel;
+import model.core.Model;
 import view.core.View;
 
 public class UserOrderHistoryPage extends View {
@@ -27,8 +31,6 @@ public class UserOrderHistoryPage extends View {
 	private JTable table;
 	private JScrollPane scroll;
 	private JScrollBar scrollBar;
-	private Vector<Vector<String>> orderList;
-	private Vector<String> data;
 	private JButton btnDetails, btnHome;
 
 	public UserOrderHistoryPage() {
@@ -66,36 +68,7 @@ public class UserOrderHistoryPage extends View {
 		
 		scrollBar = new JScrollBar();
 		
-		orderList = new Vector<>();
-		
 		table = new JTable();
-		
-		data = new Vector<>();
-		data.add("1");
-		data.add("5/12/2020");
-		data.add("Marcel");
-		data.add("John Doe");
-		data.add("West Mountain Street");
-		
-		orderList.add(data);
-		
-		data = new Vector<>();
-		data.add("2");
-		data.add("7/11/2020");
-		data.add("Athena");
-		data.add("Vanessa");
-		data.add("East Mountain Street");
-		
-		orderList.add(data);
-		
-		data = new Vector<>();
-		data.add("3");
-		data.add("12/6/2020");
-		data.add("Eileene");
-		data.add("Shane");
-		data.add("South Mountain Street");
-		
-		orderList.add(data);
 		
 		loadHistory();
 		
@@ -116,12 +89,28 @@ public class UserOrderHistoryPage extends View {
 	public void loadHistory() {
 		Vector<String> header = new Vector<>();
 		header.add("Order ID");
-		header.add("Date");
-		header.add("Username");
-		header.add("Driver Name");
-		header.add("Address");
+		header.add("Order Date");
+		header.add("Driver ID");
 		
-		DefaultTableModel dtm = new DefaultTableModel(orderList, header){
+		OrderController orderController = OrderController.getInstance();
+		
+		Vector<Vector<String>> orderList = new Vector<>();
+		Vector<String> order = new Vector<>();
+		
+		Vector<Model> orderModel = orderController.viewUserOrderHistory();
+		
+		for (Model model : orderModel) {
+			
+			OrderModel om = (OrderModel) model;
+			order = new Vector<>();
+			order.add(om.getOrderId().toString());
+			order.add(om.getOrderDate().toString());
+			order.add(om.getDriverId().toString());
+			
+			orderList.add(order);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(orderList , header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -153,8 +142,11 @@ public class UserOrderHistoryPage extends View {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				int orderId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				
 				dispose();
-				new UserDetailOrderPage().showForm();
+				OrderController.getInstance().viewUserOrderHistoryDetail(orderId);
 			}
 		});
 		

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import controller.UserController;
 import view.core.View;
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -96,7 +97,9 @@ public class LoginUserPage extends View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new HomeUserPage().showForm();
+				
+				UserController userController = UserController.getInstance();
+				userController.validateLogin(emailValue.getText(), new String(passwordValue.getPassword()));
 			}
 		});
 		

@@ -1,14 +1,19 @@
 package controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 import controller.core.Controller;
 import model.OrderModel;
+import model.UserModel;
 import model.core.Model;
 import view.AvailableOrderPage;
 import view.DriverDetailOrderHistoryPage;
 import view.DriverDetailOrderPage;
 import view.TakenOrderDetailPage;
+import view.UserCurrentOrderDetailPage;
+import view.UserDetailOrderPage;
 import view.core.View;
 
 public class OrderController extends Controller{
@@ -76,6 +81,16 @@ public class OrderController extends Controller{
 	public Vector<Model> getAllDriverOrderHistory() {
 		return orderModel.getAllDriverOrderHistory(this.driverId);
 	}
+	
+	public Vector<Vector<Object>> getUserActiveOrder(){
+		Vector<Vector<Object>> dataAcc = orderModel.getAllUserActiveOrder(UserController.getInstance().getUserId());
+		Vector<Vector<Object>> dataNotAcc = orderModel.getAllNotAcceptedOrder(UserController.getInstance().getUserId());
+		
+		for (Vector<Object> data : dataNotAcc) {
+			dataAcc.add(data);
+		}
+		return dataAcc;
+	}
 
 	public View viewAvailableOrder()
 	{
@@ -114,6 +129,56 @@ public class OrderController extends Controller{
 		OrderDetailController.getInstance().setOrderId(this.orderId);
 		
 		new DriverDetailOrderHistoryPage().showForm();
+	}
+	
+	public Vector<Model> viewUserOrderHistory() {
+		Integer userId = UserController.getInstance().getUserId();
+		return orderModel.getAllUserOrderHistory(userId);
+	}
+	
+	public void viewUserOrderHistoryDetail(Integer orderId) {
+		this.orderId = orderId;
+		
+		OrderDetailController.getInstance().setOrderId(orderId);
+		
+		new UserDetailOrderPage().showForm();
+	}
+	
+	public void viewUserActiveOrderDetail(Integer orderId) {
+		this.orderId = orderId;
+		
+		OrderDetailController.getInstance().setOrderId(orderId);
+		
+		new UserCurrentOrderDetailPage().showForm();
+	}
+	
+	public void cancelOrder(Integer orderId, String status) {
+		this.status = status;
+		
+		if(this.status.equals("Not accepted")) {
+			orderModel.removeOrder(orderId);
+		}
+	}
+	
+	public void addOrder() {
+		UserController userController = UserController.getInstance();
+		
+		OrderModel orderModel = new OrderModel();
+		UserModel user = userController.getUserByUserId();
+		
+		Date date = new Date();
+		String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		
+		orderModel.setOrderDate(formattedDate);
+		orderModel.setAddress(user.getAddress());
+		orderModel.setUserId(userController.getUserId());
+		orderModel.setStatus("Not accepted");
+		
+		orderModel.insert();
+	}
+	
+	public Integer getLastOrderId() {
+		return orderModel.getLastOrderId();
 	}
 	
 	public Integer getDriverId() {

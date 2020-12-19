@@ -19,12 +19,17 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.CartController;
+import controller.OrderController;
+import controller.OrderDetailController;
+import controller.UserController;
+import model.CartModel;
 import view.core.View;
 
 public class CartPage extends View{
 	
-	private JPanel titlePanel, cartPanel, btnPanel, contentPane, myCartPanel, navPanel;
-	private JLabel titleLabel;
+	private JPanel titlePanel, cartPanel, btnPanel, contentPane, myCartPanel, navPanel, bottomPanel, labelPanel;
+	private JLabel titleLabel, totalLabel, priceLabel;
 	private JTable table;
 	private JScrollPane scroll;
 	private JScrollBar scrollBar;
@@ -98,9 +103,20 @@ public class CartPage extends View{
 		scroll.setVerticalScrollBar(scrollBar);
 		scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
+		bottomPanel = new JPanel(new GridLayout(2, 1, 10, 0));
+		bottomPanel.setBackground(Color.ORANGE);
+		
+		labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		labelPanel.setBackground(Color.ORANGE);
+		
+		totalLabel = new JLabel("Total Price : ");
+		
+		CartController cartController = CartController.getInstance();
+		priceLabel = new JLabel(cartController.getTotalPrice().toString());
+		
 		btnPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 		btnPanel.setBackground(Color.ORANGE);
-		btnPanel.setBorder(new EmptyBorder(0, 100, 20, 100));
+		btnPanel.setBorder(new EmptyBorder(0, 100, 15, 100));
 		
 		btnCheckout = new JButton("Checkout");
 		btnRemove = new JButton("Remove from Cart");
@@ -108,10 +124,15 @@ public class CartPage extends View{
 	
 	public void loadCart() {
 		Vector<String> header = new Vector<>();
+		header.add("User ID");
+		header.add("Food ID");
 		header.add("Food");
 		header.add("Quantity");
+		header.add("Price");
 		
-		DefaultTableModel dtm = new DefaultTableModel(cartList, header){
+		CartController cartController = CartController.getInstance();
+		
+		DefaultTableModel dtm = new DefaultTableModel(cartController.getCartDataByUserId(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -132,8 +153,18 @@ public class CartPage extends View{
 		myCartPanel.add(cartPanel, BorderLayout.CENTER);
 		myCartPanel.add(btnPanel, BorderLayout.SOUTH);
 		
+		btnPanel.add(btnCheckout);
+		btnPanel.add(btnRemove);
+		
+		labelPanel.add(totalLabel);
+		labelPanel.add(priceLabel);
+		
+		bottomPanel.add(labelPanel);
+		bottomPanel.add(btnPanel);
+		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(myCartPanel, BorderLayout.CENTER);
+		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -142,8 +173,26 @@ public class CartPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new CartPage().showForm();
+				OrderController orderController = OrderController.getInstance();
+				orderController.addOrder();
+				
+				Integer lastId = orderController.getLastOrderId();
+				
+				CartController cartController = CartController.getInstance();
+				Vector<Vector<Object>> cartData = cartController.getCartDataByUserId();
+				
+				OrderDetailController orderDetailController = OrderDetailController.getInstance();
+				
+				for (Vector<Object> data : cartData) {
+					orderDetailController.addDetail(lastId, Integer.parseInt(data.get(1).toString()), Integer.parseInt(data.get(3).toString()));
+				}
+				
+				for (Vector<Object> data : cartData) {
+					cartController.deleteSpecificCart(Integer.parseInt(data.get(1).toString()));
+				}
+				
+				loadCart();
+				priceLabel.setText(cartController.getTotalPrice().toString());
 			}
 		});
 		
@@ -153,6 +202,21 @@ public class CartPage extends View{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new HomeUserPage().showForm();
+			}
+		});
+		
+		btnRemove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int row = table.getSelectedRow();
+				CartController cartController = CartController.getInstance();
+				int foodIdValue = Integer.parseInt(table.getValueAt(row, 1).toString());
+				cartController.deleteSpecificCart(foodIdValue);
+				
+				loadCart();
+				
+				priceLabel.setText(cartController.getTotalPrice().toString());
 			}
 		});
 		

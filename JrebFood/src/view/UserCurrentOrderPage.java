@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
 import view.core.View;
 
 public class UserCurrentOrderPage extends View {
@@ -28,8 +29,6 @@ public class UserCurrentOrderPage extends View {
 	private JTable table;
 	private JScrollPane scroll;
 	private JScrollBar scrollBar;
-	private Vector<Vector<String>> currentOrderList;
-	private Vector<String> data;
 	private JButton btnDetails, btnCancel, btnHome;
 
 	public UserCurrentOrderPage() {
@@ -67,40 +66,8 @@ public class UserCurrentOrderPage extends View {
 		
 		scrollBar = new JScrollBar();
 		
-		currentOrderList = new Vector<>();
-		
 		table = new JTable();
-		
-		data = new Vector<>();
-		data.add("1");
-		data.add("5/12/2020");
-		data.add("Marcel");
-		data.add("John Doe");
-		data.add("West Mountain Street");
-		data.add("Cooked");
-		
-		currentOrderList.add(data);
-		
-		data = new Vector<>();
-		data.add("2");
-		data.add("7/11/2020");
-		data.add("Athena");
-		data.add("null");
-		data.add("East Mountain Street");
-		data.add("Not Accepted");
-		
-		currentOrderList.add(data);
-		
-		data = new Vector<>();
-		data.add("3");
-		data.add("12/6/2020");
-		data.add("Eileene");
-		data.add("Jessica");
-		data.add("South Mountain Street");
-		data.add("Ordered");
-		
-		currentOrderList.add(data);
-		
+	
 		loadCurrentOrder();
 		
 		scroll = new JScrollPane();
@@ -122,12 +89,13 @@ public class UserCurrentOrderPage extends View {
 		Vector<String> header = new Vector<>();
 		header.add("Order ID");
 		header.add("Date");
-		header.add("Username");
 		header.add("Driver Name");
 		header.add("Address");
 		header.add("Status");
 		
-		DefaultTableModel dtm = new DefaultTableModel(currentOrderList, header){
+		OrderController orderController = OrderController.getInstance();
+		
+		DefaultTableModel dtm = new DefaultTableModel(orderController.getUserActiveOrder(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -160,8 +128,11 @@ public class UserCurrentOrderPage extends View {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				int orderId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				
 				dispose();
-				new UserCurrentOrderDetailPage().showForm();
+				OrderController.getInstance().viewUserActiveOrderDetail(orderId);
 			}
 		});
 		
@@ -171,6 +142,21 @@ public class UserCurrentOrderPage extends View {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new HomeUserPage().showForm();
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				int orderId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				String status = table.getValueAt(row, 4).toString();
+				
+				OrderController orderController = OrderController.getInstance();
+				orderController.cancelOrder(orderId, status);
+				
+				loadCurrentOrder();
 			}
 		});
 	}

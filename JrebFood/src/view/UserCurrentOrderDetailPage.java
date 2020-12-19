@@ -18,6 +18,9 @@ import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.OrderDetailController;
+import model.OrderDetailModel;
+import model.core.Model;
 import view.core.View;
 
 public class UserCurrentOrderDetailPage extends View{
@@ -70,24 +73,6 @@ public class UserCurrentOrderDetailPage extends View{
 		
 		table = new JTable();
 		
-		data = new Vector<>();
-		data.add("Pizza");
-		data.add("20");
-		
-		detailList.add(data);
-		
-		data = new Vector<>();
-		data.add("Burger");
-		data.add("100");
-		
-		detailList.add(data);
-		
-		data = new Vector<>();
-		data.add("Indomie");
-		data.add("1000");
-		
-		detailList.add(data);
-		
 		loadDetail();
 		
 		scroll = new JScrollPane();
@@ -100,10 +85,29 @@ public class UserCurrentOrderDetailPage extends View{
 	
 	public void loadDetail() {
 		Vector<String> header = new Vector<>();
-		header.add("Food Name");
+		header.add("Order ID");
+		header.add("Food ID");
 		header.add("Quantity");
 		
-		DefaultTableModel dtm = new DefaultTableModel(detailList, header){
+		Vector<Vector<String>> activeOrderDetail = new Vector<>();
+		Vector<String> detail = new Vector<>();
+		
+		Vector<Model> orderDetail = OrderDetailController.getInstance().getDetailByOrderId();
+		
+		for (Model model : orderDetail) {
+			
+			OrderDetailModel od = (OrderDetailModel) model;
+			
+			detail = new Vector<>();
+			
+			detail.add(od.getOrderId().toString());
+			detail.add(od.getFoodId().toString());
+			detail.add(od.getQty().toString());
+			
+			activeOrderDetail.add(detail);
+		}
+		
+		DefaultTableModel dtm = new DefaultTableModel(activeOrderDetail, header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

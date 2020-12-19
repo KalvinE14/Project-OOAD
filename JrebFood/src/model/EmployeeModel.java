@@ -33,12 +33,6 @@ public class EmployeeModel extends Model{
 	}
 
 	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Vector<Model> getAll() {
 		Vector<Model> employeeData = new Vector<>();
 		
