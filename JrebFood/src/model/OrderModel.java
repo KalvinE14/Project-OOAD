@@ -57,6 +57,25 @@ public class OrderModel extends Model{
 		
 		return null;
 	}
+	
+	public Integer getTotalOrderCompleteByEmployeeId(Integer employeeId) {
+		String query = String.format("SELECT * FROM %s WHERE driverId = %d AND status LIKE 'Finished'", tableName, employeeId);
+		ResultSet rs = con.execQuery(query);
+		
+		
+		try {
+			Integer counter = 0;
+			while(rs.next()) {
+				counter++;
+			}
+			return counter;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	@Override
 	public void update() {

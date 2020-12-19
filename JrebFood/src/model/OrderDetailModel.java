@@ -40,6 +40,25 @@ public class OrderDetailModel extends Model{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public Integer getTotalOrderPrice(Integer orderId) {
+		String query = String.format("SELECT * FROM %s od, %s f WHERE orderId = %d AND od.foodId = f.foodId", tableName, "foods", orderId);
+		ResultSet rs = con.execQuery(query);
+		
+		
+		try {
+			Integer totalPrice = 0;
+			while(rs.next()) {
+				totalPrice += rs.getInt("qty") * rs.getInt("price");
+			}
+			return totalPrice;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 
 	@Override

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -20,10 +21,31 @@ public class EmployeeModel extends Model{
 	public EmployeeModel() {
 		this.tableName = "employees";
 	}
+	
+	public void deleteEmployee(Integer employeeId) {
+		String query = String.format("DELETE FROM %s WHERE employeeId = %d", tableName, employeeId);
+		con.executeUpdate(query);
+	}
 
 	@Override
 	public void insert() {
+		String query = String.format("INSERT INTO %s VALUES(null, ?, ?, ?, ?, ?, ?)", tableName);
 		
+		PreparedStatement ps = con.prepStatement(query);
+		
+		try {
+			ps.setInt(1, roleId);
+			ps.setString(2, name);
+			ps.setString(3, dob);
+			ps.setString(4, email);
+			ps.setString(5, password);
+			ps.setString(6, status);
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -50,6 +72,34 @@ public class EmployeeModel extends Model{
 				em.setEmail(rs.getString("email"));
 				em.setPassword(rs.getString("password"));
 				em.setStatus(rs.getString("status"));
+				
+				employeeData.add(em);
+			}
+			
+			return employeeData;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public Vector<Model> getAllActiveEmployee() {
+		Vector<Model> employeeData = new Vector<>();
+		
+		String query = String.format("SELECT * FROM %s WHERE status LIKE 'Active'", this.tableName);
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			while (rs.next()) {
+				EmployeeModel em = new EmployeeModel();
+				
+				em.setEmployeeId(rs.getInt("employeeId"));
+				em.setRoleId(rs.getInt("roleId"));
+				em.setName(rs.getString("name"));
+				em.setDob(rs.getString("dob"));
+				em.setEmail(rs.getString("email"));
 				
 				employeeData.add(em);
 			}

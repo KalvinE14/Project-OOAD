@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import controller.core.Controller;
+import model.OrderDetailModel;
 import model.OrderModel;
 import model.UserModel;
 import model.core.Model;
@@ -80,6 +81,20 @@ public class OrderController extends Controller{
 	
 	public Vector<Model> getAllDriverOrderHistory() {
 		return orderModel.getAllDriverOrderHistory(this.driverId);
+	}
+	
+	public Integer getTotalOrderPriceByEmployeeId(Integer employeeId) {
+		Vector<Model> orderList = orderModel.getAllDriverOrderHistory(employeeId);
+		
+		Integer totalPrice = 0;
+		
+		for (Model model : orderList) {
+			OrderDetailModel odm = new OrderDetailModel();
+			OrderModel om = (OrderModel) model;
+			
+			totalPrice += odm.getTotalOrderPrice(om.getOrderId());
+		}
+		return totalPrice;
 	}
 	
 	public Vector<Vector<Object>> getUserActiveOrder(){
