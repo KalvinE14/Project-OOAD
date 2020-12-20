@@ -24,12 +24,12 @@ import view.core.View;
 
 public class FinancialSummaryPage extends View{
 	
-	private JPanel titlePanel, orderPanel, totalIncomePanel, contentPane, employeePanel, navPanel;
+	private JPanel titlePanel, orderPanel, totalIncomePanel, contentPane, employeePanel, navPanel, btnPanel;
 	private JLabel titleLabel, totalLabel;
 	private JTable table;
 	private JScrollPane scroll;
 	private JScrollBar scrollBar;
-	private JButton btnHome;
+	private JButton btnHome, btnFilter, btnResetFilter;
 
 	public FinancialSummaryPage() {
 		super();
@@ -52,6 +52,8 @@ public class FinancialSummaryPage extends View{
 		navPanel.setBackground(Color.ORANGE);
 		
 		btnHome = new JButton("Home");
+		btnFilter = new JButton("Filter");
+		btnResetFilter = new JButton("Reset Filter");
 		
 		titlePanel = new JPanel();
 		titlePanel.setBorder(null);
@@ -84,7 +86,10 @@ public class FinancialSummaryPage extends View{
 		totalLabel = new JLabel();
 		totalLabel.setText("Total Income: Rp. " + EmployeeController.getInstance().getTotalIncome().toString());
 		totalLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-		//btnFire = new JButton("Fire Employee");
+		
+		btnPanel = new JPanel(new GridLayout(2, 1, 10, -26));
+		btnPanel.setBackground(Color.ORANGE);
+		btnPanel.setBorder(new EmptyBorder(0, 55, 20, 55));
 		
 	}
 
@@ -105,6 +110,24 @@ public class FinancialSummaryPage extends View{
 		
 		table.setModel(dtm);
 	}
+	
+	private void loadSpecificFinancialSummary(Integer employeeId) {
+		Vector<String> header = new Vector<>();
+		header.add("Employee ID");
+		header.add("Employee Name");
+		header.add("Total Order Complete");
+		header.add("Total Order Price");
+		
+		DefaultTableModel dtm = new DefaultTableModel(EmployeeController.getInstance().getSpecificFinancialSummary(employeeId) , header){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		table.setModel(dtm);
+	}
 
 	@Override
 	public void addComponent() {
@@ -112,15 +135,18 @@ public class FinancialSummaryPage extends View{
 		orderPanel.add(scroll);
 		navPanel.add(btnHome);
 		
+		totalIncomePanel.add(totalLabel);
+		
 		employeePanel.add(titlePanel, BorderLayout.NORTH);
 		employeePanel.add(orderPanel, BorderLayout.CENTER);
 		employeePanel.add(totalIncomePanel, BorderLayout.SOUTH);
 		
-		totalIncomePanel.add(totalLabel);
+		btnPanel.add(btnFilter);
+		btnPanel.add(btnResetFilter);
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(employeePanel, BorderLayout.CENTER);
-		contentPane.add(totalIncomePanel, BorderLayout.SOUTH);
+		contentPane.add(btnPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -132,6 +158,26 @@ public class FinancialSummaryPage extends View{
 				dispose();
 				new HomeManagerPage().showForm();
 					
+			}
+		});
+		
+		btnFilter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				Integer employeeId = Integer.parseInt(table.getValueAt(row, 0).toString());
+				loadSpecificFinancialSummary(employeeId);
+				btnFilter.setVisible(false);
+			}
+		});
+		
+		btnResetFilter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadFinancialSummary();
+				btnFilter.setVisible(true);
 			}
 		});
 	}

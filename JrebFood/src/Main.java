@@ -10,11 +10,12 @@ import view.ManageFoodPage;
 public class Main {
 
 	public Main() {
-		new InitialPage().showForm();
+//		new InitialPage().showForm();
 //		new HomeChefPage().showForm();
 //		new HomeManagerPage().showForm();
 //		Connect.getConnection();
-//		new FinancialSummaryPage().showForm();
+		new FinancialSummaryPage().showForm();
+//		new HireEmployeePage().showForm();
 	}
 
 	public static void main(String[] args) {

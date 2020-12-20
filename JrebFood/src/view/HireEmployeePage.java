@@ -26,14 +26,15 @@ import view.core.View;
 
 public class HireEmployeePage extends View{
 	
-	JPanel btnPanel, titlePanel, formPanel, typePanel;
+	JPanel btnPanel, titlePanel, formPanel, typePanel, contentPane, hirePanel;
 	JLabel titleLabel, emailLabel, typeLabel, passLabel, nameLabel, addressLabel, phoneLabel, roleLabel, dobLabel;
 	JTextField emailTxt, nameTxt, addressTxt, phoneTxt, dobTxt;
-	JButton btnBack, btnHire;
+	JButton btnHome, btnHire;
 	JPasswordField password;
 	
 	private JRadioButton driver, chef;
 	private ButtonGroup type;
+	private JPanel navPanel;
 
 	public HireEmployeePage() {
 		super();
@@ -45,17 +46,24 @@ public class HireEmployeePage extends View{
 	public void initialize() {
 		setBackground(Color.ORANGE);
 		
-		titlePanel = new JPanel();
+		contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(Color.ORANGE);
+		setContentPane(contentPane);
+		
+		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		navPanel.setBackground(Color.ORANGE);
+		
+		titlePanel = new JPanel(new BorderLayout());
 		titlePanel.setBorder(null);
 		titlePanel.setBackground(Color.ORANGE);
-		titlePanel.setBorder(new EmptyBorder(70, 200, 20, 200));
+		titlePanel.setBorder(new EmptyBorder(70, 200, 20, 100));
 		
 		titleLabel = new JLabel("Hire Form");
 		titleLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
 		formPanel = new JPanel();
 		formPanel.setBorder(new EmptyBorder(50, 50, 10, 50));
-		formPanel.setLayout(new GridLayout(7, 2, 0, 25));
+		formPanel.setLayout(new GridLayout(7, 2, 0, 20));
 		formPanel.setBackground(Color.ORANGE);
 		
 		emailLabel = new JLabel();
@@ -99,18 +107,21 @@ public class HireEmployeePage extends View{
 		typePanel.setBackground(Color.ORANGE);
 		type = new ButtonGroup();
 		
+		hirePanel = new JPanel(new BorderLayout());
+		
 		btnPanel = new JPanel();
-		btnPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		btnPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
 		btnPanel.setBackground(Color.ORANGE);
 		
-		btnBack = new JButton("Back");
+		btnHome = new JButton("Home");
 		btnHire = new JButton("Hire");
 	}
 
 	@Override
 	public void addComponent() {
 		titlePanel.add(titleLabel);
-		add(titlePanel, BorderLayout.NORTH);
+		btnPanel.add(btnHire);
+		navPanel.add(btnHome);
 		
 		formPanel.add(emailLabel);
 		formPanel.add(emailTxt);
@@ -133,11 +144,14 @@ public class HireEmployeePage extends View{
 		
 		formPanel.add(roleLabel);
 		formPanel.add(typePanel);
-		add(formPanel, BorderLayout.CENTER);
 		
-		btnPanel.add(btnHire);
-		btnPanel.add(btnBack);
-		add(btnPanel, BorderLayout.SOUTH);
+		hirePanel.add(titlePanel, BorderLayout.NORTH);
+		hirePanel.add(formPanel, BorderLayout.CENTER); 
+		hirePanel.add(btnPanel, BorderLayout.SOUTH);
+		
+		contentPane.add(navPanel, BorderLayout.NORTH);
+		contentPane.add(hirePanel, BorderLayout.CENTER);
+		
 		
 	}
 	
@@ -175,7 +189,7 @@ public class HireEmployeePage extends View{
 			}
 		});
 		
-		btnBack.addActionListener(new ActionListener() {
+		btnHome.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {

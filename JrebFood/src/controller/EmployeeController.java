@@ -134,6 +134,34 @@ public class EmployeeController extends Controller{
 		return financialSummaryList;
 	}
 	
+	public Vector<Vector<Object>> getSpecificFinancialSummary(Integer employeeId){
+		
+		Vector<Vector<Object>> financialSummaryList = new Vector<>();
+		Vector<Object> financialSummary = new Vector<>();
+		
+		Vector<Model> employeeList = employeeModel.getAllActiveEmployee();
+		
+		for (Model model : employeeList) {
+			EmployeeModel em = (EmployeeModel) model;
+			
+			if(em.getEmployeeId() == employeeId) {
+				if(em.getRoleId() == 1) {
+					OrderModel om = new OrderModel();
+					
+					financialSummary = new Vector<>();
+					financialSummary.add(em.getEmployeeId());
+					financialSummary.add(em.getName());
+					financialSummary.add(om.getTotalOrderCompleteByEmployeeId(em.getEmployeeId()));
+					financialSummary.add(OrderController.getInstance().getTotalOrderPriceByEmployeeId(em.getEmployeeId()));
+					
+					financialSummaryList.add(financialSummary);
+				}
+			}
+		}
+		
+		return financialSummaryList;
+	}
+	
 	public Integer getTotalIncome() {
 		Vector<Vector<Object>> financialRecap = new Vector<>();
 		financialRecap = getFinancialSummary();
