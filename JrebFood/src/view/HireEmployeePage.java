@@ -14,7 +14,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -26,8 +28,9 @@ public class HireEmployeePage extends View{
 	
 	JPanel btnPanel, titlePanel, formPanel, typePanel;
 	JLabel titleLabel, emailLabel, typeLabel, passLabel, nameLabel, addressLabel, phoneLabel, roleLabel, dobLabel;
-	JTextField emailTxt, passTxt, nameTxt, addressTxt, phoneTxt, dobTxt;
+	JTextField emailTxt, nameTxt, addressTxt, phoneTxt, dobTxt;
 	JButton btnBack, btnHire;
+	JPasswordField password;
 	
 	private JRadioButton driver, chef;
 	private ButtonGroup type;
@@ -51,7 +54,7 @@ public class HireEmployeePage extends View{
 		titleLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
 		formPanel = new JPanel();
-		formPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
+		formPanel.setBorder(new EmptyBorder(50, 50, 10, 50));
 		formPanel.setLayout(new GridLayout(7, 2, 0, 25));
 		formPanel.setBackground(Color.ORANGE);
 		
@@ -62,7 +65,7 @@ public class HireEmployeePage extends View{
 		
 		passLabel = new JLabel("Password");
 		passLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		passTxt = new JTextField();
+		password = new JPasswordField();
 		
 		nameLabel = new JLabel("Name");
 		nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -97,7 +100,7 @@ public class HireEmployeePage extends View{
 		type = new ButtonGroup();
 		
 		btnPanel = new JPanel();
-		btnPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btnPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 		btnPanel.setBackground(Color.ORANGE);
 		
 		btnBack = new JButton("Back");
@@ -112,7 +115,7 @@ public class HireEmployeePage extends View{
 		formPanel.add(emailLabel);
 		formPanel.add(emailTxt);
 		formPanel.add(passLabel);
-		formPanel.add(passTxt);
+		formPanel.add(password);
 		formPanel.add(nameLabel);
 		formPanel.add(nameTxt);
 		formPanel.add(addressLabel);
@@ -137,6 +140,29 @@ public class HireEmployeePage extends View{
 		add(btnPanel, BorderLayout.SOUTH);
 		
 	}
+	
+	private void showConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Hire this employee ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			EmployeeController employeeController = EmployeeController.getInstance();
+			
+			Integer roleId = 0;
+			
+			if(type.getSelection().getActionCommand().equals("Driver")) {
+				roleId = 1;
+			}
+			else if(type.getSelection().getActionCommand().equals("Chef")) {
+				roleId = 2;
+			}
+			employeeController.addEmployee(roleId, nameTxt.getText(), dobTxt.getText(), emailTxt.getText(), new String(password.getPassword()));
+			JOptionPane.showMessageDialog(this, "Employee hired");
+			dispose();
+			new HomeManagerPage().showForm();
+			break;
+		}
+	}
 
 	@Override
 	public void addListener() {
@@ -145,17 +171,7 @@ public class HireEmployeePage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EmployeeController employeeController = EmployeeController.getInstance();
-				
-				Integer roleId = 0;
-				
-				if(type.getSelection().getActionCommand().equals("Driver")) {
-					roleId = 1;
-				}
-				else if(type.getSelection().getActionCommand().equals("Chef")) {
-					roleId = 2;
-				}
-				employeeController.addEmployee(roleId, nameTxt.getText(), dobTxt.getText(), emailTxt.getText(), passTxt.getText());
+				showConfirmation(e);
 			}
 		});
 		

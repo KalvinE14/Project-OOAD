@@ -22,8 +22,8 @@ public class EmployeeModel extends Model{
 		this.tableName = "employees";
 	}
 	
-	public void deleteEmployee(Integer employeeId) {
-		String query = String.format("DELETE FROM %s WHERE employeeId = %d", tableName, employeeId);
+	public void fireEmployee(Integer employeeId) {
+		String query = String.format("UPDATE %s SET status = 'Inactive' WHERE employeeId = %d", tableName, employeeId);
 		con.executeUpdate(query);
 	}
 

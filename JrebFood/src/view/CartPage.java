@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -20,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.CartController;
+import controller.EmployeeController;
 import controller.OrderController;
 import controller.OrderDetailController;
 import controller.UserController;
@@ -166,6 +168,54 @@ public class CartPage extends View{
 		contentPane.add(myCartPanel, BorderLayout.CENTER);
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 	}
+	
+	private void showCheckoutConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure want to checkout this cart ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			OrderController orderController = OrderController.getInstance();
+			orderController.addOrder();
+			
+			Integer lastId = orderController.getLastOrderId();
+			
+			CartController cartController = CartController.getInstance();
+			Vector<Vector<Object>> cartData = cartController.getCartDataByUserId();
+			
+			OrderDetailController orderDetailController = OrderDetailController.getInstance();
+			
+			for (Vector<Object> data : cartData) {
+				orderDetailController.addDetail(lastId, Integer.parseInt(data.get(1).toString()), Integer.parseInt(data.get(3).toString()));
+			}
+			
+			for (Vector<Object> data : cartData) {
+				cartController.deleteSpecificCart(Integer.parseInt(data.get(1).toString()));
+			}
+			
+			loadCart();
+			priceLabel.setText(cartController.getTotalPrice().toString());
+			JOptionPane.showMessageDialog(this, "Checkout success");
+			break;
+		}
+	}
+	
+	private void showRemoveCartConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Remove this food from your cart ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			int row = table.getSelectedRow();
+			CartController cartController = CartController.getInstance();
+			int foodIdValue = Integer.parseInt(table.getValueAt(row, 1).toString());
+			cartController.deleteSpecificCart(foodIdValue);
+			
+			loadCart();
+			
+			priceLabel.setText(cartController.getTotalPrice().toString());
+			JOptionPane.showMessageDialog(this, "Cart removed");
+			break;
+		}
+	}
 
 	@Override
 	public void addListener() {
@@ -173,26 +223,7 @@ public class CartPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OrderController orderController = OrderController.getInstance();
-				orderController.addOrder();
-				
-				Integer lastId = orderController.getLastOrderId();
-				
-				CartController cartController = CartController.getInstance();
-				Vector<Vector<Object>> cartData = cartController.getCartDataByUserId();
-				
-				OrderDetailController orderDetailController = OrderDetailController.getInstance();
-				
-				for (Vector<Object> data : cartData) {
-					orderDetailController.addDetail(lastId, Integer.parseInt(data.get(1).toString()), Integer.parseInt(data.get(3).toString()));
-				}
-				
-				for (Vector<Object> data : cartData) {
-					cartController.deleteSpecificCart(Integer.parseInt(data.get(1).toString()));
-				}
-				
-				loadCart();
-				priceLabel.setText(cartController.getTotalPrice().toString());
+				showCheckoutConfirmation(e);
 			}
 		});
 		
@@ -208,15 +239,8 @@ public class CartPage extends View{
 		btnRemove.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int row = table.getSelectedRow();
-				CartController cartController = CartController.getInstance();
-				int foodIdValue = Integer.parseInt(table.getValueAt(row, 1).toString());
-				cartController.deleteSpecificCart(foodIdValue);
-				
-				loadCart();
-				
-				priceLabel.setText(cartController.getTotalPrice().toString());
+			public void actionPerformed(ActionEvent e) {
+				showRemoveCartConfirmation(e);
 			}
 		});
 		

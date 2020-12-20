@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -21,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.CartController;
+import controller.EmployeeController;
 import controller.FoodController;
 import model.FoodModel;
 import model.core.Model;
@@ -141,7 +143,22 @@ public class HomeUserPage extends View{
 		btnPanel.add(btnAdd);
 		add(btnPanel, BorderLayout.SOUTH);
 	}
-
+	
+	private void showConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Add this food to your cart ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			CartController cartController = CartController.getInstance();
+			int row = table.getSelectedRow();
+			int foodId = Integer.parseInt(table.getValueAt(row, 0).toString());
+			
+			cartController.addCart(foodId);
+			JOptionPane.showMessageDialog(this, "Cart added");
+			break;
+		}
+	}
+	
 	@Override
 	public void addListener() {
 		btnCart.addActionListener(new ActionListener() {
@@ -175,11 +192,7 @@ public class HomeUserPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CartController cartController = CartController.getInstance();
-				int row = table.getSelectedRow();
-				int foodId = Integer.parseInt(table.getValueAt(row, 0).toString());
-				
-				cartController.addCart(foodId);
+				showConfirmation(e);
 			}
 		});
 	}

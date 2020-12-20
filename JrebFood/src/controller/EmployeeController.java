@@ -52,8 +52,8 @@ public class EmployeeController extends Controller{
 		return false;
 	}
 	
-	public void deleteSelectedEmployee(Integer employeeId) {
-		employeeModel.deleteEmployee(employeeId);
+	public void fireSelectedEmployee(Integer employeeId) {
+		employeeModel.fireEmployee(employeeId);
 	}
 	
 	public void addEmployee(Integer roleId, String name, String dob, String email, String password) {

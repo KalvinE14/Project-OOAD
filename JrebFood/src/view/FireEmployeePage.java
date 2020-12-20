@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -81,7 +82,7 @@ public class FireEmployeePage extends View{
 		scroll.setViewportView(table);
 		scroll.setPreferredSize(new Dimension(380, 380));
 		scroll.setVerticalScrollBar(scrollBar);
-		scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
+		scroll.setBorder(new EmptyBorder(10, 0, 10, 0));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -108,6 +109,9 @@ public class FireEmployeePage extends View{
 		
 		for (Model model : employeeModel) {
 			EmployeeModel em = (EmployeeModel) model;
+			
+			if(em.getRoleId() == 3) continue;
+			
 			employee = new Vector<>();
 			employee.add(em.getEmployeeId().toString());
 			employee.add(em.getRoleId().toString());
@@ -144,6 +148,23 @@ public class FireEmployeePage extends View{
 		contentPane.add(employeePanel, BorderLayout.CENTER);
 		
 	}
+	
+	private void showConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure want to fire this employee ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			EmployeeController employeeController = EmployeeController.getInstance();
+			
+			int row = table.getSelectedRow();
+			Integer employeeId = Integer.parseInt(table.getValueAt(row, 0).toString());
+			
+			employeeController.fireSelectedEmployee(employeeId);
+			loadEmployee();
+			JOptionPane.showMessageDialog(this, "Employee fired");
+			break;
+		}
+	}
 
 	@Override
 	public void addListener() {
@@ -161,14 +182,7 @@ public class FireEmployeePage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EmployeeController employeeController = EmployeeController.getInstance();
-				
-				int row = table.getSelectedRow();
-				Integer employeeId = Integer.parseInt(table.getValueAt(row, 0).toString());
-				
-				employeeController.deleteSelectedEmployee(employeeId);
-				loadEmployee();
-				
+				showConfirmation(e);
 			}
 		});
 		

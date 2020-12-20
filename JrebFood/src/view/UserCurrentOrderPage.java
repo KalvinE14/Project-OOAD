@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -19,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.CartController;
 import controller.OrderController;
 import view.core.View;
 
@@ -121,6 +123,24 @@ public class UserCurrentOrderPage extends View {
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(activeOrderPanel, BorderLayout.CENTER);
 	}
+	
+	private void showConfirmation(ActionEvent e) {
+		int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure want to cancel this order ?");
+		
+		switch(confirmation) {
+		case JOptionPane.YES_OPTION:
+			int row = table.getSelectedRow();
+			int orderId = Integer.parseInt(table.getValueAt(row, 0).toString());
+			String status = table.getValueAt(row, 4).toString();
+			
+			OrderController orderController = OrderController.getInstance();
+			orderController.cancelOrder(orderId, status);
+			
+			loadCurrentOrder();
+			JOptionPane.showMessageDialog(this, "Order canceled");
+			break;
+		}
+	}
 
 	@Override
 	public void addListener() {
@@ -149,14 +169,7 @@ public class UserCurrentOrderPage extends View {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int row = table.getSelectedRow();
-				int orderId = Integer.parseInt(table.getValueAt(row, 0).toString());
-				String status = table.getValueAt(row, 4).toString();
-				
-				OrderController orderController = OrderController.getInstance();
-				orderController.cancelOrder(orderId, status);
-				
-				loadCurrentOrder();
+				showConfirmation(e);
 			}
 		});
 	}

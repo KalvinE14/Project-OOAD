@@ -79,7 +79,7 @@ public class FinancialSummaryPage extends View{
 		
 		totalIncomePanel = new JPanel();
 		totalIncomePanel.setBackground(Color.ORANGE);
-		
+		totalIncomePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		totalLabel = new JLabel();
 		totalLabel.setText("Total Income: Rp. " + EmployeeController.getInstance().getTotalIncome().toString());
