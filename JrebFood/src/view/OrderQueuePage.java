@@ -7,6 +7,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,14 +18,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import controller.OrderController;
 import view.core.View;
 
 public class OrderQueuePage extends View{
 	
 	JPanel contentPane, navPanel, viewOrderPanel, titlePanel, footerPanel, btnPanel;
-	JLabel titleLabel, messageLabel;
-	JButton confirmBtn, homeBtn;
+	JLabel titleLabel, messageLabel, orderIdLabel;
+	JButton confirmBtn, homeBtn, detailBtn;
 	JTable table;
 	JScrollPane scrollPane;
 
@@ -55,7 +60,7 @@ public class OrderQueuePage extends View{
 		footerPanel.setBackground(Color.ORANGE);
 		footerPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
 		
-		btnPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		btnPanel = new JPanel(new GridLayout(2, 1, 0, 5));
 		btnPanel.setBackground(Color.ORANGE);
 		btnPanel.setBorder(new EmptyBorder(0, 175, 0, 175));
 		
@@ -75,6 +80,9 @@ public class OrderQueuePage extends View{
 		confirmBtn = new JButton("Confirm");
 		confirmBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		
+		detailBtn = new JButton("Detail");
+		detailBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		
 		messageLabel = new JLabel("Order's status has been updated to ready");
 		messageLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,6 +92,7 @@ public class OrderQueuePage extends View{
 	@Override
 	public void addComponent() {
 		btnPanel.add(confirmBtn);
+		btnPanel.add(detailBtn);
 		
 		footerPanel.add(btnPanel);
 		footerPanel.add(messageLabel);
@@ -98,10 +107,47 @@ public class OrderQueuePage extends View{
 		
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(viewOrderPanel, BorderLayout.CENTER);
+		
+		loadData();
 	}
 
 	@Override
 	public void addListener() {
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+				
+				orderIdLabel = new JLabel();
+
+				orderIdLabel.setText(table.getValueAt(row, 0).toString());
+			}
+		});
 		homeBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -115,10 +161,59 @@ public class OrderQueuePage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				messageLabel.setVisible(true);
+				if(orderIdLabel != null)
+				{
+					OrderController.getInstance().updateStatus(Integer.parseInt(orderIdLabel.getText()), "Cooked");
+					messageLabel.setVisible(true);
+					messageLabel.setText("Order's status has been updated to cooked!");
+					loadData();
+				}else
+				{
+					messageLabel.setVisible(true);
+					messageLabel.setText("Please choose the order first!");
+				}
+				
+				orderIdLabel = null;
+				
 			}
 		});
 		
+		detailBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(orderIdLabel != null)
+				{
+					dispose();
+					OrderController.getInstance().viewOrderQueueDetail(Integer.parseInt(orderIdLabel.getText()));
+				}else
+				{
+					messageLabel.setVisible(true);
+					messageLabel.setText("Please choose the order first!");
+				}
+			}
+		});
+		
+	}
+	
+	public void loadData() 
+	{
+		Vector<String> header = new Vector<>();
+		header.add("Order ID");
+		header.add("Date");
+		header.add("Driver Name");
+		
+		OrderController orderController = OrderController.getInstance();
+		
+		DefaultTableModel dtm = new DefaultTableModel(orderController.getAllOrderedStatus(), header){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		table.setModel(dtm);
 	}
 
 }

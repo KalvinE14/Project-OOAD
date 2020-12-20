@@ -167,31 +167,16 @@ public class TakenOrderPage extends View{
 	
 	private void loadData()
 	{
-		takenOrderList = new Vector<>();
-		
-		header = new Vector<>();
+		Vector<String> header = new Vector<>();
 		header.add("Order ID");
-		header.add("Date");
-		header.add("User ID");
+		header.add("User Name");
 		header.add("Address");
+		header.add("Order Time");
 		header.add("Status");
 		
-		Vector<Model> list = OrderController.getInstance().getAllTakenOrder();
+		OrderController orderController = OrderController.getInstance();
 		
-		for (Model model : list) {
-			OrderModel orderModel = (OrderModel) model;
-			
-			detail = new Vector<>();
-			detail.add(orderModel.getOrderId().toString());
-			detail.add(orderModel.getOrderDate());
-			detail.add(orderModel.getUserId().toString());
-			detail.add(orderModel.getAddress());
-			detail.add(orderModel.getStatus());
-			
-			takenOrderList.add(detail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(takenOrderList, header){
+		DefaultTableModel dtm = new DefaultTableModel(orderController.getAllTakenOrder(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

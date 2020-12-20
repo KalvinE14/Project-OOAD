@@ -62,7 +62,7 @@ public class TakenOrderDetailPage extends View{
 		
 		footerPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footerPanel.setBackground(Color.ORANGE);
-		footerPanel.setBorder(new EmptyBorder(50, 175, 0, 175));
+		footerPanel.setBorder(new EmptyBorder(50, 150, 0, 150));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -179,27 +179,15 @@ public class TakenOrderDetailPage extends View{
 	
 	private void loadData()
 	{
-		orderData = new Vector<>();
-		
 		header = new Vector<>();
 		header.add("Order ID");
-		header.add("Food ID");
+		header.add("Food Name");
+		header.add("Food Price");
 		header.add("Quantity");
 		
-		Vector<Model> list = OrderDetailController.getInstance().getDetailByOrderId();
+		OrderDetailController orderDetailController = OrderDetailController.getInstance();
 		
-		for (Model model : list) {
-			OrderDetailModel orderModel = (OrderDetailModel) model;
-			
-			detail = new Vector<>();
-			detail.add(orderModel.getOrderId().toString());
-			detail.add(orderModel.getFoodId().toString());
-			detail.add(orderModel.getQty().toString());
-			
-			orderData.add(detail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderData, header){
+		DefaultTableModel dtm = new DefaultTableModel(orderDetailController.getDetailByOrderId(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

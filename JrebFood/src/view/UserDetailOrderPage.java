@@ -84,29 +84,15 @@ public class UserDetailOrderPage extends View{
 	
 	public void loadDetail() {
 		Vector<String> header = new Vector<>();
+		header = new Vector<>();
 		header.add("Order ID");
-		header.add("Food ID");
+		header.add("Food Name");
+		header.add("Food Price");
 		header.add("Quantity");
 		
-		Vector<Vector<String>> orderHistoryDetail = new Vector<>();
-		Vector<String> detail = new Vector<>();
+		OrderDetailController orderDetailController = OrderDetailController.getInstance();
 		
-		Vector<Model> orderDetail = OrderDetailController.getInstance().getDetailByOrderId();
-		
-		for (Model model : orderDetail) {
-			
-			OrderDetailModel od = (OrderDetailModel) model;
-			
-			detail = new Vector<>();
-			
-			detail.add(od.getOrderId().toString());
-			detail.add(od.getFoodId().toString());
-			detail.add(od.getQty().toString());
-			
-			orderHistoryDetail.add(detail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderHistoryDetail, header){
+		DefaultTableModel dtm = new DefaultTableModel(orderDetailController.getDetailByOrderId(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

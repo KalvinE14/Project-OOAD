@@ -7,6 +7,7 @@ import model.EmployeeModel;
 import model.OrderModel;
 import model.core.Model;
 import view.AvailableOrderPage;
+import view.HomeChefPage;
 import view.HomeDriverPage;
 import view.HomeManagerPage;
 import view.LoginEmployeePage;
@@ -92,8 +93,10 @@ public class EmployeeController extends Controller{
 					OrderController.getInstance().setDriverId(this.employeeId);
 					
 					new HomeDriverPage().showForm();
-				}
-				else if(employeeModel.getRoleId() == 3) {
+				}else if(employeeModel.getRoleId() == 2)
+				{
+					new HomeChefPage().showForm();
+				}else if(employeeModel.getRoleId() == 3) {
 					new HomeManagerPage().showForm();
 				}
 			}

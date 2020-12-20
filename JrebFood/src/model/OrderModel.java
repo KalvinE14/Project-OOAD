@@ -149,22 +149,24 @@ public class OrderModel extends Model{
 		}
 	}
 	
-	public Vector<Model> getAllAvailableOrder() {
-		Vector<Model> orderData = new Vector<>();
+	public Vector<Vector<Object>> getAllAvailableOrder() {
+		Vector<Vector<Object>> orderData = new Vector<>();
+		Vector<Object> data = new Vector<>();
 		
-		String query = String.format("SELECT orderId, userId, address, orderDate FROM %s WHERE status LIKE 'Not accepted'", this.tableName);
+		String query = String.format("SELECT orderId, name, o.address, orderDate FROM %s o JOIN %s u "
+				+ "ON o.userId=u.userId WHERE status LIKE 'Not accepted'", this.tableName, "users");
 		ResultSet rs = con.execQuery(query);
 		
 		try {
 			while (rs.next()) {
-				OrderModel om = new OrderModel();
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("name"));
+				data.add(rs.getString("o.address"));
+				data.add(rs.getString("orderDate"));
 				
-				om.setOrderId(rs.getInt("orderId"));
-				om.setOrderDate(rs.getString("orderDate"));
-				om.setAddress(rs.getString("address"));
-				om.setUserId(rs.getInt("userId"));
 				
-				orderData.add(om);
+				orderData.add(data);
 			}
 			
 			return orderData;
@@ -176,25 +178,54 @@ public class OrderModel extends Model{
 		return null;
 	}
 	
-	public Vector<Model> getAllTakenOrder(Integer driverId) {
-		Vector<Model> orderData = new Vector<>();
+	public Vector<Vector<Object>> getAllTakenOrder(Integer driverId) {
+		Vector<Vector<Object>> orderData = new Vector<>();
+		Vector<Object> data = new Vector<>();
 		
-		String query = String.format("SELECT orderId, orderDate, userId, address, status FROM %s "
+		String query = String.format("SELECT orderId, orderDate, name, o.address, status FROM %s o JOIN %s u "
+				+ "ON o.userId=u.userId "
 				+ "WHERE (status LIKE 'Accepted' OR status LIKE 'Ordered' OR status LIKE 'Cooked') "
-				+ "AND driverId = %d", this.tableName, driverId);
+				+ "AND driverId = %d", this.tableName, "users", driverId);
 		ResultSet rs = con.execQuery(query);
 		
 		try {
 			while (rs.next()) {
-				OrderModel om = new OrderModel();
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("name"));
+				data.add(rs.getString("o.address"));
+				data.add(rs.getString("orderDate"));
+				data.add(rs.getString("status"));
 				
-				om.setOrderId(rs.getInt("orderId"));
-				om.setOrderDate(rs.getString("orderDate"));
-				om.setUserId(rs.getInt("userId"));
-				om.setAddress(rs.getString("address"));
-				om.setStatus(rs.getString("status"));
 				
-				orderData.add(om);
+				orderData.add(data);
+			}
+			
+			return orderData;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public Vector<Vector<Object>> getAllOrderedStatus() {
+		Vector<Vector<Object>> orderData = new Vector<>();
+		Vector<Object> data = new Vector<>();
+		
+		String query = String.format("SELECT orderId, orderDate, d.name FROM %s o JOIN %s d "
+				+ "ON o.driverId=d.employeeId WHERE o.status LIKE 'Ordered' ", this.tableName, "employees");
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			while (rs.next()) {
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("orderDate"));
+				data.add(rs.getString("d.name"));
+				
+				orderData.add(data);
 			}
 			
 			return orderData;

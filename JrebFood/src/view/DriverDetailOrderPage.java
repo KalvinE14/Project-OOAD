@@ -190,27 +190,15 @@ public class DriverDetailOrderPage extends View{
 	
 	private void loadData()
 	{
-		orderDetailData = new Vector<>();
-		
 		orderHeader = new Vector<>();
 		orderHeader.add("Order ID");
-		orderHeader.add("Food ID");
+		orderHeader.add("Food Name");
+		orderHeader.add("Food Price");
 		orderHeader.add("Quantity");
 		
-		Vector<Model> list = OrderDetailController.getInstance().getDetailByOrderId();
+		OrderDetailController orderDetailController = OrderDetailController.getInstance();
 		
-		for (Model model : list) {
-			OrderDetailModel orderDetailModel = (OrderDetailModel) model;
-			
-			orderDetail = new Vector<>();
-			orderDetail.add(orderDetailModel.getOrderId().toString());
-			orderDetail.add(orderDetailModel.getFoodId().toString());
-			orderDetail.add(orderDetailModel.getQty().toString());
-			
-			orderDetailData.add(orderDetail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderDetailData, orderHeader){
+		DefaultTableModel dtm = new DefaultTableModel(orderDetailController.getDetailByOrderId(), orderHeader){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

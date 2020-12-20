@@ -88,21 +88,23 @@ public class OrderDetailModel extends Model{
 		return null;
 	}
 	
-	public Vector<Model> getDetailByOrderId(Integer orderId) {
-		Vector<Model> orderDetailData = new Vector<>();
+	public Vector<Vector<Object>> getDetailByOrderId(Integer orderId) {
+		Vector<Vector<Object>> orderDetailData = new Vector<>();
+		Vector<Object> data = new Vector<>();
 		
-		String query = String.format("SELECT * FROM %s WHERE orderId=%d", this.tableName, orderId);
+		String query = String.format("SELECT orderId, name, price, qty FROM %s o JOIN %s f "
+				+ "ON o.foodId=f.foodId WHERE o.orderId LIKE %s ", this.tableName, "foods", orderId);
 		ResultSet rs = con.execQuery(query);
 		
 		try {
 			while (rs.next()) {
-				OrderDetailModel odm = new OrderDetailModel();
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("name"));
+				data.add(rs.getInt("price"));
+				data.add(rs.getInt("qty"));
 				
-				odm.setOrderId(rs.getInt("orderId"));
-				odm.setFoodId(rs.getInt("foodId"));
-				odm.setQty(rs.getInt("qty"));
-				
-				orderDetailData.add(odm);
+				orderDetailData.add(data);
 			}
 			
 			return orderDetailData;
@@ -113,9 +115,10 @@ public class OrderDetailModel extends Model{
 		
 		return null;
 	}
-	
-	public Vector<Model> getDriverDetailOrderHistory(Integer orderId) {
-		Vector<Model> orderDetailData = new Vector<>();
+		
+	public Vector<Vector<Object>> getDriverDetailOrderHistory(Integer orderId) {
+		Vector<Vector<Object>> orderDetailData = new Vector<>();
+		Vector<Object> data = new Vector<>();
 		
 		String query = String.format("SELECT od.orderId, od.foodId, od.qty FROM %s od JOIN orders o ON od.orderId=o.orderId "
 				+ "WHERE status LIKE 'Finished' AND od.orderId=%d", this.tableName, orderId);
@@ -123,13 +126,13 @@ public class OrderDetailModel extends Model{
 		
 		try {
 			while (rs.next()) {
-				OrderDetailModel odm = new OrderDetailModel();
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("name"));
+				data.add(rs.getInt("price"));
+				data.add(rs.getInt("qty"));
 				
-				odm.setOrderId(rs.getInt("orderId"));
-				odm.setFoodId(rs.getInt("foodId"));
-				odm.setQty(rs.getInt("qty"));
-				
-				orderDetailData.add(odm);
+				orderDetailData.add(data);
 			}
 			
 			return orderDetailData;

@@ -54,7 +54,7 @@ public class AvailableOrderPage extends View{
 		
 		avaiOrderPanel = new JPanel(new BorderLayout());
 		avaiOrderPanel.setBackground(Color.ORANGE);
-		avaiOrderPanel.setBorder(new EmptyBorder(30, 0, 50, 0));
+		avaiOrderPanel.setBorder(new EmptyBorder(30, 30, 50, 30));
 		
 		orderPanel = new JPanel(new BorderLayout());
 		orderPanel.setBackground(Color.ORANGE);
@@ -86,7 +86,7 @@ public class AvailableOrderPage extends View{
 		
 		footPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footPanel.setBackground(Color.ORANGE);
-		footPanel.setBorder(new EmptyBorder(30, 120, 0, 120));
+		footPanel.setBorder(new EmptyBorder(30, 100, 0, 100));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -210,29 +210,15 @@ public class AvailableOrderPage extends View{
 	
 	private void loadData()
 	{
-		availableOrderList = new Vector<>();
-		
-		header = new Vector<>();
+		Vector<String> header = new Vector<>();
 		header.add("Order ID");
-		header.add("User ID");
+		header.add("User Name");
 		header.add("Address");
 		header.add("Order Time");
 		
-		Vector<Model> list = OrderController.getInstance().getAllAvailableOrder();
+		OrderController orderController = OrderController.getInstance();
 		
-		for (Model model : list) {
-			OrderModel orderModel = (OrderModel) model;
-			
-			detail = new Vector<>();
-			detail.add(orderModel.getOrderId().toString());
-			detail.add(orderModel.getUserId().toString());
-			detail.add(orderModel.getAddress());
-			detail.add(orderModel.getOrderDate());
-			
-			availableOrderList.add(detail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(availableOrderList, header){
+		DefaultTableModel dtm = new DefaultTableModel(orderController.getAllAvailableOrder(), header){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

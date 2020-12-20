@@ -172,7 +172,7 @@ public class DriverOrderHistoryPage extends View{
 		title = new JLabel("Order History");
 		title.setBounds(10, 140, 50, 20);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
 	}
 	
 	private void loadData()

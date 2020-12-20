@@ -66,7 +66,7 @@ public class DriverDetailOrderHistoryPage extends View{
 		
 		orderHistoryPanel = new JPanel(new BorderLayout());
 		orderHistoryPanel.setBackground(Color.ORANGE);
-		orderHistoryPanel.setBorder(new EmptyBorder(0, 0, 50, 0));
+		orderHistoryPanel.setBorder(new EmptyBorder(0, 30, 50, 30));
 	}
 
 	private void initNavigation() {
@@ -114,32 +114,20 @@ public class DriverDetailOrderHistoryPage extends View{
 		title = new JLabel("Order Detail History");
 		title.setBounds(10, 140, 50, 20);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		title.setFont(new Font("Segoe UI", Font.BOLD, 24));
 	}
 	
 	public void loadData()
 	{
-		orderDetailHistoryData = new Vector<>();
-		
 		orderDetailHistoryHeader = new Vector<>();
 		orderDetailHistoryHeader.add("Order ID");
-		orderDetailHistoryHeader.add("Food ID");
+		orderDetailHistoryHeader.add("Food Name");
+		orderDetailHistoryHeader.add("Food Price");
 		orderDetailHistoryHeader.add("Quantity");
 		
-		Vector<Model> list = OrderDetailController.getInstance().getDriverDetailOrderHistory();
+		OrderDetailController orderDetailController = OrderDetailController.getInstance();
 		
-		for (Model model : list) {
-			OrderDetailModel orderDetailModel = (OrderDetailModel) model;
-			
-			orderDetailHistoryDetail = new Vector<>();
-			orderDetailHistoryDetail.add(orderDetailModel.getOrderId().toString());
-			orderDetailHistoryDetail.add(orderDetailModel.getFoodId().toString());
-			orderDetailHistoryDetail.add(orderDetailModel.getQty().toString());
-			
-			orderDetailHistoryData.add(orderDetailHistoryDetail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderDetailHistoryData, orderDetailHistoryHeader){
+		DefaultTableModel dtm = new DefaultTableModel(orderDetailController.getDetailByOrderId(), orderDetailHistoryHeader){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

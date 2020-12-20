@@ -65,11 +65,11 @@ public class OrderDetailController extends Controller{
 		odm.insert();
 	}
 	
-	public Vector<Model> getDetailByOrderId() {
+	public Vector<Vector<Object>> getDetailByOrderId() {
 		return orderDetailModel.getDetailByOrderId(this.orderId);
 	}
 	
-	public Vector<Model> getDriverDetailOrderHistory() {
+	public Vector<Vector<Object>> getDriverDetailOrderHistory() {
 		return orderDetailModel.getDriverDetailOrderHistory(this.orderId);
 	}
 	

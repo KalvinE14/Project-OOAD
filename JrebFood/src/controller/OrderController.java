@@ -12,6 +12,7 @@ import model.core.Model;
 import view.AvailableOrderPage;
 import view.DriverDetailOrderHistoryPage;
 import view.DriverDetailOrderPage;
+import view.OrderQueueDetailPage;
 import view.TakenOrderDetailPage;
 import view.UserCurrentOrderDetailPage;
 import view.UserDetailOrderPage;
@@ -71,16 +72,20 @@ public class OrderController extends Controller{
 		om.updateStatus();
 	}
 	
-	public Vector<Model> getAllAvailableOrder() {
+	public Vector<Vector<Object>> getAllAvailableOrder() {
 		return orderModel.getAllAvailableOrder();
 	}
 	
-	public Vector<Model> getAllTakenOrder() {
+	public Vector<Vector<Object>> getAllTakenOrder() {
 		return orderModel.getAllTakenOrder(this.driverId);
 	}
 	
 	public Vector<Model> getAllDriverOrderHistory() {
 		return orderModel.getAllDriverOrderHistory(this.driverId);
+	}
+	
+	public Vector<Vector<Object>> getAllOrderedStatus(){
+		return orderModel.getAllOrderedStatus();
 	}
 	
 	public Integer getTotalOrderPriceByEmployeeId(Integer employeeId) {
@@ -106,10 +111,23 @@ public class OrderController extends Controller{
 		}
 		return dataAcc;
 	}
+	
+	public Vector<Vector<Object>> getAllOrderedStatusDetail(){
+		return orderModel.getAllOrderedStatus();
+	}
 
 	public View viewAvailableOrder()
 	{
 		return new AvailableOrderPage();
+	}
+
+	public void viewOrderQueueDetail(Integer orderId)
+	{
+		this.orderId = orderId;
+		
+		OrderDetailController.getInstance().setOrderId(this.orderId);
+		
+		new OrderQueueDetailPage().showForm();
 	}
 	
 	public void viewDetailOrderByDriver(Integer orderId)
