@@ -80,7 +80,7 @@ public class OrderController extends Controller{
 		return orderModel.getAllTakenOrder(this.driverId);
 	}
 	
-	public Vector<Model> getAllDriverOrderHistory() {
+	public Vector<Vector<Object>> getAllDriverOrderHistory() {
 		return orderModel.getAllDriverOrderHistory(this.driverId);
 	}
 	
@@ -89,16 +89,27 @@ public class OrderController extends Controller{
 	}
 	
 	public Integer getTotalOrderPriceByEmployeeId(Integer employeeId) {
-		Vector<Model> orderList = orderModel.getAllDriverOrderHistory(employeeId);
+//		Vector<Model> orderList = orderModel.getAllDriverOrderHistory(employeeId);
+//		
+//		Integer totalPrice = 0;
+//		
+//		for (Model model : orderList) {
+//			OrderDetailModel odm = new OrderDetailModel();
+//			OrderModel om = (OrderModel) model;
+//			
+//			totalPrice += odm.getTotalOrderPrice(om.getOrderId());
+//		}
+//		return totalPrice;
 		
+		// Yang gw ubah
 		Integer totalPrice = 0;
 		
-		for (Model model : orderList) {
+		for (Vector<Object> orderList : orderModel.getAllDriverOrderHistory(employeeId)) {
 			OrderDetailModel odm = new OrderDetailModel();
-			OrderModel om = (OrderModel) model;
 			
-			totalPrice += odm.getTotalOrderPrice(om.getOrderId());
+			totalPrice += odm.getTotalOrderPrice((Integer) orderList.get(0));
 		}
+		
 		return totalPrice;
 	}
 	

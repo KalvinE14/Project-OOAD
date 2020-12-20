@@ -5,6 +5,7 @@ import java.util.Vector;
 import controller.core.Controller;
 import model.OrderDetailModel;
 import model.OrderModel;
+import model.UserModel;
 import model.core.Model;
 import view.AvailableOrderPage;
 import view.core.View;
@@ -106,6 +107,13 @@ public class OrderDetailController extends Controller{
 //	public Vector<Model> getAllDriverOrderHistory() {
 //		return orderModel.getAllDriverOrderHistory(this.driverId);
 //	}
+	
+	public UserModel getUserByOrderId()
+	{
+		UserModel um = new UserModel();
+		
+		return um.getUserByOrderId(this.orderId);
+	}
 	
 	public Integer getDriverId() {
 		return driverId;

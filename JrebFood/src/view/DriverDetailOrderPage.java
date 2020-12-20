@@ -20,8 +20,10 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.OrderController;
 import controller.OrderDetailController;
+import controller.UserController;
 import model.OrderDetailModel;
 import model.OrderModel;
+import model.UserModel;
 import model.core.Model;
 import view.core.View;
 
@@ -60,7 +62,6 @@ public class DriverDetailOrderPage extends View{
 	@Override
 	public void addComponent() {
 		custInfoPanel.add(custNameLabel);
-		custInfoPanel.add(custGenderLabel);
 		custInfoPanel.add(custPhoneLabel);
 		custInfoPanel.add(custEmailLabel);
 		custInfoPanel.add(custAddressLabel);
@@ -84,7 +85,9 @@ public class DriverDetailOrderPage extends View{
 		contentPane.add(navPanel, BorderLayout.NORTH);
 		contentPane.add(infoPanel, BorderLayout.CENTER);
 		
-		loadData();
+		loadOrderDetailData();
+		
+		loadUserData();
 	}
 
 	@Override
@@ -145,19 +148,16 @@ public class DriverDetailOrderPage extends View{
 		custLabel.setBounds(10, 140, 50, 20);
 		custLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		custLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		custNameLabel = new JLabel("Jack");
+		custNameLabel = new JLabel();
 		custNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		custNameLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		custGenderLabel = new JLabel("Male");
-		custGenderLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		custGenderLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		custAddressLabel = new JLabel("Bambu Street");
+		custAddressLabel = new JLabel();
 		custAddressLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		custAddressLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		custPhoneLabel = new JLabel("081222222222");
+		custPhoneLabel = new JLabel();
 		custPhoneLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		custPhoneLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		custEmailLabel = new JLabel("jack@gmail.com");
+		custEmailLabel = new JLabel();
 		custEmailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		custEmailLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		
@@ -188,7 +188,7 @@ public class DriverDetailOrderPage extends View{
 		orderScrollPane.setBackground(Color.ORANGE);
 	}
 	
-	private void loadData()
+	private void loadOrderDetailData()
 	{
 		orderHeader = new Vector<>();
 		orderHeader.add("Order ID");
@@ -207,5 +207,17 @@ public class DriverDetailOrderPage extends View{
 		};
 		
 		orderDetailTable.setModel(dtm);
+	}
+	
+	private void loadUserData()
+	{
+		OrderDetailController orderDetailController = OrderDetailController.getInstance();
+		
+		UserModel userModel = orderDetailController.getUserByOrderId();
+		
+		custNameLabel.setText(userModel.getName());
+		custAddressLabel.setText(userModel.getAddress());
+		custPhoneLabel.setText(userModel.getPhoneNumber());
+		custEmailLabel.setText(userModel.getEmail());
 	}
 }

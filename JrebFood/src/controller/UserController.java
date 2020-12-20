@@ -79,6 +79,10 @@ public class UserController extends Controller {
 		return userModel.getUserByUserId(this.userId);
 	}
 	
+	public UserModel getUserByOrderId(Integer orderId) {
+		return userModel.getUserByOrderId(orderId);
+	}
+	
 	public Integer getUserId() {
 		return userId;
 	}

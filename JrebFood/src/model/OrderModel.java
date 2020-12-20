@@ -237,24 +237,26 @@ public class OrderModel extends Model{
 		return null;
 	}
 	
-	public Vector<Model> getAllDriverOrderHistory(Integer driverId) {
-		Vector<Model> orderData = new Vector<>();
+	public Vector<Vector<Object>> getAllDriverOrderHistory(Integer driverId) {
+		Vector<Vector<Object>> orderData = new Vector<>();
+		Vector<Object> data = new Vector<>();
 		
-		String query = String.format("SELECT orderId, userId, address, orderDate FROM %s "
+		String query = String.format("SELECT orderId, name, o.address, orderDate FROM %s o JOIN %s u "
+				+ "ON o.userId=u.userId "
 				+ "WHERE status LIKE 'Finished' "
-				+ "AND driverId = %d", this.tableName, driverId);
+				+ "AND driverId = %d", this.tableName, "users", driverId);
 		ResultSet rs = con.execQuery(query);
 		
 		try {
 			while (rs.next()) {
-				OrderModel om = new OrderModel();
+				data = new Vector<>();
+				data.add(rs.getInt("orderId"));
+				data.add(rs.getString("name"));
+				data.add(rs.getString("o.address"));
+				data.add(rs.getString("orderDate"));
 				
-				om.setOrderId(rs.getInt("orderId"));
-				om.setUserId(rs.getInt("userId"));
-				om.setAddress(rs.getString("address"));
-				om.setOrderDate(rs.getString("orderDate"));
 				
-				orderData.add(om);
+				orderData.add(data);
 			}
 			
 			return orderData;

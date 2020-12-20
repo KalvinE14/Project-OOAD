@@ -177,30 +177,15 @@ public class DriverOrderHistoryPage extends View{
 	
 	private void loadData()
 	{
-		orderHistoryData = new Vector<>();
-		
 		orderHistoryHeader = new Vector<>();
 		orderHistoryHeader.add("Order ID");
-		orderHistoryHeader.add("Date");
-		orderHistoryHeader.add("User ID");
+		orderHistoryHeader.add("User Name");
 		orderHistoryHeader.add("Address");
+		orderHistoryHeader.add("Order Time");
 		
-		Vector<Model> list = OrderController.getInstance().getAllDriverOrderHistory();
+		OrderController orderController = OrderController.getInstance();
 		
-		for (Model model : list) {
-			OrderModel orderModel = (OrderModel) model;
-			
-			orderHistoryDetail = new Vector<>();
-			orderHistoryDetail.add(orderModel.getOrderId().toString());
-			orderHistoryDetail.add(orderModel.getOrderDate());
-			orderHistoryDetail.add(orderModel.getUserId().toString());
-			orderHistoryDetail.add(orderModel.getAddress());
-			orderHistoryDetail.add(orderModel.getStatus());
-			
-			orderHistoryData.add(orderHistoryDetail);
-		}
-		
-		DefaultTableModel dtm = new DefaultTableModel(orderHistoryData, orderHistoryHeader){
+		DefaultTableModel dtm = new DefaultTableModel(orderController.getAllDriverOrderHistory(), orderHistoryHeader){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

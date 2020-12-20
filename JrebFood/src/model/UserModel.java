@@ -101,6 +101,30 @@ public class UserModel extends Model{
 		return null;
 	}
 	
+	public UserModel getUserByOrderId(Integer orderId) {
+		String query = String.format("SELECT name, u.address, phoneNumber, email FROM %s u JOIN %s o "
+				+ "ON u.userId=o.userId "
+				+ "WHERE orderId = %d", this.tableName, "orders", orderId);
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			if(rs.next()) {
+				UserModel user = new UserModel();
+				user.setName(rs.getString("name"));
+				user.setAddress(rs.getString("address"));
+				user.setPhoneNumber(rs.getString("phoneNumber"));
+				user.setEmail(rs.getString("email"));
+				
+				return user;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public Integer getUserId() {
 		return userId;
 	}
