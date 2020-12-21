@@ -89,19 +89,6 @@ public class OrderController extends Controller{
 	}
 	
 	public Integer getTotalOrderPriceByEmployeeId(Integer employeeId) {
-//		Vector<Model> orderList = orderModel.getAllDriverOrderHistory(employeeId);
-//		
-//		Integer totalPrice = 0;
-//		
-//		for (Model model : orderList) {
-//			OrderDetailModel odm = new OrderDetailModel();
-//			OrderModel om = (OrderModel) model;
-//			
-//			totalPrice += odm.getTotalOrderPrice(om.getOrderId());
-//		}
-//		return totalPrice;
-		
-		// Yang gw ubah
 		Integer totalPrice = 0;
 		
 		for (Vector<Object> orderList : orderModel.getAllDriverOrderHistory(employeeId)) {

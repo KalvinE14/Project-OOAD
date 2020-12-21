@@ -38,7 +38,6 @@ public class UserController extends Controller {
 
 	@Override
 	public Vector<Model> getAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

@@ -96,18 +96,6 @@ public class OrderDetailController extends Controller{
 		return false;
 	}
 	
-//	public Vector<Model> getDetailByOrderId(Integer orderId) {
-//		return orderDetailModel.getDetailByOrderId(orderId);
-//	}
-	
-//	public Vector<Model> getAllTakenOrder() {
-//		return orderModel.getAllTakenOrder(this.driverId);
-//	}
-//	
-//	public Vector<Model> getAllDriverOrderHistory() {
-//		return orderModel.getAllDriverOrderHistory(this.driverId);
-//	}
-	
 	public UserModel getUserByOrderId()
 	{
 		UserModel um = new UserModel();
