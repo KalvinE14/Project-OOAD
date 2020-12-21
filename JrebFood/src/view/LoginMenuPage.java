@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,9 +21,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginMenuPage extends View {
-	JPanel contentPane, loginMenuPanel, loginBtnPanel;
+	JPanel contentPane, loginMenuPanel, loginBtnPanel, navPanel;
 	JLabel titleLabel;
-	JButton loginUserBtn, loginEmployeeBtn;
+	JButton loginUserBtn, loginEmployeeBtn, btnHome;
 	
 	public LoginMenuPage() {
 		super();
@@ -34,13 +35,16 @@ public class LoginMenuPage extends View {
 	public void initialize() {
 		setBackground(Color.ORANGE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(Color.ORANGE);
 		setContentPane(contentPane);
 		
+		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		navPanel.setBackground(Color.ORANGE);
+		
 		loginMenuPanel = new JPanel(new BorderLayout());
 		loginMenuPanel.setBackground(Color.ORANGE);
-		loginMenuPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
+		loginMenuPanel.setBorder(new EmptyBorder(50, 0, 180, 0));
 		
 		loginBtnPanel = new JPanel(new GridLayout(2, 1, 0, 50));
 		loginBtnPanel.setBackground(Color.ORANGE);
@@ -49,6 +53,8 @@ public class LoginMenuPage extends View {
 		titleLabel = new JLabel("Login Menu");
 		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		btnHome = new JButton("Home");
 		
 		loginUserBtn = new JButton("Login as User");
 		loginUserBtn.setHorizontalAlignment(SwingConstants.CENTER);
@@ -66,7 +72,10 @@ public class LoginMenuPage extends View {
 		loginMenuPanel.add(titleLabel, BorderLayout.NORTH);
 		loginMenuPanel.add(loginBtnPanel, BorderLayout.CENTER);
 		
-		contentPane.add(loginMenuPanel);
+		navPanel.add(btnHome);
+		
+		contentPane.add(navPanel, BorderLayout.NORTH);
+		contentPane.add(loginMenuPanel, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -86,6 +95,15 @@ public class LoginMenuPage extends View {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				new LoginEmployeePage().showForm();
+			}
+		});
+		
+		btnHome.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new InitialPage().showForm();
 			}
 		});
 	}

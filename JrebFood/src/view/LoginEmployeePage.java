@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,10 +23,10 @@ import java.awt.event.ActionListener;
 
 public class LoginEmployeePage extends View {
 	JLabel txtLogin, txtEmail, txtPassword;
-	JPanel titlePanel, formPanel, btnPanel, fieldPanel;
+	JPanel titlePanel, formPanel, btnPanel, fieldPanel, navPanel;
 	JTextField emailValue;
 	JPasswordField passwordValue;
-	JButton btnSubmit;
+	JButton btnSubmit, btnHome;
 	
 	public LoginEmployeePage() {
 		super();
@@ -68,6 +69,11 @@ public class LoginEmployeePage extends View {
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
 		
+		btnHome = new JButton("Home");
+		
+		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		navPanel.setBackground(Color.ORANGE);
+		
 		btnSubmit = new JButton();
 		btnSubmit.setText("Login");
 	}
@@ -86,8 +92,11 @@ public class LoginEmployeePage extends View {
 		fieldPanel.add(formPanel);
 		fieldPanel.add(btnPanel);
 		
-		add(titlePanel, BorderLayout.NORTH);
-		add(fieldPanel, BorderLayout.CENTER);
+		navPanel.add(btnHome);
+		
+		add(navPanel, BorderLayout.NORTH);
+		add(titlePanel, BorderLayout.CENTER);
+		add(fieldPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -100,6 +109,15 @@ public class LoginEmployeePage extends View {
 				EmployeeController controller = EmployeeController.getInstance();
 				
 				controller.authenticateEmployee(emailValue.getText(), new String(passwordValue.getPassword()));
+			}
+		});
+		
+		btnHome.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new InitialPage().showForm();
 			}
 		});
 		

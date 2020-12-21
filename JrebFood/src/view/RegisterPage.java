@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -22,13 +23,11 @@ import view.core.View;
 
 public class RegisterPage extends View{
 	
-	private JPanel titlePanel, formPanel, btnPanel, genderPanel;
-	private JLabel titleLabel, emailLabel, passLabel, usernameLabel, addressLabel, phoneLabel, genderLabel;
+	private JPanel titlePanel, formPanel, btnPanel, navPanel;
+	private JLabel titleLabel, emailLabel, passLabel, usernameLabel, addressLabel, phoneLabel;
 	private JTextField emailTxt, usernameTxt, addressTxt, phoneTxt;
 	private JPasswordField passTxt;
-	private JRadioButton male, female;
-	private ButtonGroup gender;
-	private JButton btnRegister;
+	private JButton btnRegister, btnHome;
 
 	public RegisterPage() {
 		super();
@@ -40,15 +39,21 @@ public class RegisterPage extends View{
 	public void initialize() {
 		setBackground(Color.ORANGE);
 		
-		titlePanel = new JPanel();
+		navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		navPanel.setBackground(Color.ORANGE);
+		navPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
+		
+		
+		titlePanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		titlePanel.setBorder(null);
 		titlePanel.setBackground(Color.ORANGE);
-		titlePanel.setBorder(new EmptyBorder(70, 200, 20, 200));
+		titlePanel.setBorder(new EmptyBorder(0, 0, 20, 100));
 		
 		titleLabel = new JLabel("Register");
 		titleLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+		titleLabel.setBorder(new EmptyBorder(20, 200, 0, 0));
 		
-		formPanel = new JPanel(new GridLayout(5, 2, 0, 25));
+		formPanel = new JPanel(new GridLayout(5, 2, 0, 40));
 		formPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
 		formPanel.setBackground(Color.ORANGE);
 		
@@ -68,10 +73,14 @@ public class RegisterPage extends View{
 		btnPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
 		btnPanel.setBackground(Color.ORANGE);
 		btnRegister = new JButton("Register");
+		
+		btnHome = new JButton("Home");
 	}
 
 	@Override
 	public void addComponent() {
+		navPanel.add(btnHome);
+		titlePanel.add(navPanel);
 		titlePanel.add(titleLabel);
 		add(titlePanel, BorderLayout.NORTH);
 		
@@ -102,6 +111,15 @@ public class RegisterPage extends View{
 				
 				UserController userController = UserController.getInstance();
 				userController.validateRegistration(emailTxt.getText(), new String(passTxt.getPassword()), usernameTxt.getText(), addressTxt.getText(), phoneTxt.getText());
+			}
+		});
+		
+		btnHome.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new InitialPage().showForm();
 			}
 		});
 	}
