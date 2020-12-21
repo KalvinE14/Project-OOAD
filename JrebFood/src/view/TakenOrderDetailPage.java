@@ -62,7 +62,7 @@ public class TakenOrderDetailPage extends View{
 		
 		footerPanel = new JPanel(new GridLayout(2, 1, 0, 0));
 		footerPanel.setBackground(Color.ORANGE);
-		footerPanel.setBorder(new EmptyBorder(50, 150, 0, 150));
+		footerPanel.setBorder(new EmptyBorder(50, 50, 0, 50));
 		
 		btnPanel = new JPanel();
 		btnPanel.setBackground(Color.ORANGE);
@@ -127,7 +127,7 @@ public class TakenOrderDetailPage extends View{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				OrderDetailController.getInstance().updateStatus();
-				msg.setText("User's order has  been ordered to the restaurant");
+				msg.setText("User's order has been ordered to the restaurant");
 				msg.setVisible(true);
 				confirmBtn.setVisible(false);
 			}

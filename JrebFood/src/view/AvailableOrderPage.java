@@ -174,7 +174,10 @@ public class AvailableOrderPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				confirmPanel.setVisible(true);
+				if(orderIdLabel != null)
+				{
+					confirmPanel.setVisible(true);
+				}
 			}
 		});
 		
@@ -191,11 +194,8 @@ public class AvailableOrderPage extends View{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(orderIdLabel != null)
-				{
-					dispose();
-					OrderController.getInstance().viewDetailOrderByDriver(Integer.parseInt(orderIdLabel.getText()));
-				}
+				dispose();
+				OrderController.getInstance().viewDetailOrderByDriver(Integer.parseInt(orderIdLabel.getText()));
 			}
 		});
 		
